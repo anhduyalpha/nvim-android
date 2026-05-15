@@ -143,27 +143,11 @@ map("n", "gr", vim.lsp.buf.references, { desc = "References" })
 map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 
--- ── Clear ALL default <leader>c keymaps (LazyVim + LSP) ──
--- <leader>c is reserved exclusively for C++ (defined in lang/c_cpp.lua)
--- Override with nop FIRST, then delete on LspAttach for buffer-local ones
-local leader_c_keys = {
-  "<leader>ca", "<leader>cc", "<leader>cd", "<leader>cf", "<leader>cl",
-  "<leader>cr", "<leader>cA", "<leader>cs", "<leader>cm", "<leader>ck",
-}
--- Global override: map to <nop> so LazyVim can't use them
-for _, key in ipairs(leader_c_keys) do
-  vim.keymap.set("n", key, "<nop>", { desc = "", silent = true })
-  vim.keymap.set("v", key, "<nop>", { desc = "", silent = true })
-end
--- Buffer-local: delete any LspAttach keymaps (LazyVim sets buffer-local)
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    for _, key in ipairs(leader_c_keys) do
-      pcall(vim.keymap.del, "n", key, { buffer = args.buf })
-      pcall(vim.keymap.del, "v", key, { buffer = args.buf })
-    end
-  end,
-})
+-- ── <leader>c reserved for C++ ───────────────────────────
+-- No global overrides needed. C++ keymaps are defined in lang/c_cpp.lua
+-- with ft = { "c", "cpp" } — lazy.nvim handles filetype scoping natively.
+-- LazyVim default <leader>c keymaps are buffer-local on LspAttach;
+-- they won't conflict because c_cpp.lua keys take priority via lazy.nvim keys spec.
 
 -- ── Terminal ─────────────────────────────────────────────
 map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
