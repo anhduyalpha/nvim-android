@@ -185,6 +185,15 @@ _(None — project complete)_
   2. `lsp.lua` — Moved Mason from `<leader>cm` → `<leader>um`
 - **Commit**: `fix: reserve <leader>c exclusively for C++, clear all LazyVim defaults`
 
+### Session #12 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: Reserve <leader>c exclusively for C++, fix stubborn LazyVim defaults
+- **Completed**:
+  1. `keymaps.lua` — Global `<nop>` override for all `<leader>c` keys + LspAttach buffer-local cleanup
+  2. `lsp.lua` — Removed Mason `<leader>cm` keymap entirely
+  3. Fixed: LazyVim sets buffer-local keymaps on LspAttach; nop override blocks them globally
+- **Commit**: `fix: force clear all <leader>c defaults, remove Mason keymap`
+
 ### Session #11 — 2026-05-15
 - **Duration**: ~10 min
 - **Worked on**: C++ dedicated keymaps, bits/stdc++.h support, code suggestions

@@ -145,21 +145,22 @@ map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 
 -- ── Clear ALL default <leader>c keymaps (LazyVim + LSP) ──
 -- <leader>c is reserved exclusively for C++ (defined in lang/c_cpp.lua)
+-- Override with nop FIRST, then delete on LspAttach for buffer-local ones
+local leader_c_keys = {
+  "<leader>ca", "<leader>cc", "<leader>cd", "<leader>cf", "<leader>cl",
+  "<leader>cr", "<leader>cA", "<leader>cs", "<leader>cm", "<leader>ck",
+}
+-- Global override: map to <nop> so LazyVim can't use them
+for _, key in ipairs(leader_c_keys) do
+  vim.keymap.set("n", key, "<nop>", { desc = "", silent = true })
+  vim.keymap.set("v", key, "<nop>", { desc = "", silent = true })
+end
+-- Buffer-local: delete any LspAttach keymaps (LazyVim sets buffer-local)
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
-    local buf = args.buf
-    local keys_to_delete = {
-      "<leader>ca", "<leader>cc", "<leader>cd", "<leader>cf", "<leader>cl",
-      "<leader>cr", "<leader>cA", "<leader>cs", "<leader>cm", "<leader>ck",
-    }
-    for _, key in ipairs(keys_to_delete) do
-      pcall(vim.keymap.del, "n", key, { buffer = buf })
-      pcall(vim.keymap.del, "v", key, { buffer = buf })
-    end
-    -- Also delete global ones
-    for _, key in ipairs(keys_to_delete) do
-      pcall(vim.keymap.del, "n", key)
-      pcall(vim.keymap.del, "v", key)
+    for _, key in ipairs(leader_c_keys) do
+      pcall(vim.keymap.del, "n", key, { buffer = args.buf })
+      pcall(vim.keymap.del, "v", key, { buffer = args.buf })
     end
   end,
 })

@@ -8,9 +8,6 @@ return {
   {
     "mason-org/mason.nvim",
     cmd = "Mason",
-    keys = {
-      { "<leader>um", "<cmd>Mason<cr>", desc = "Mason" },
-    },
     opts = {
       ensure_installed = {
         -- Formatters
