@@ -143,6 +143,27 @@ map("n", "gr", vim.lsp.buf.references, { desc = "References" })
 map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 
+-- ── Clear ALL default <leader>c keymaps (LazyVim + LSP) ──
+-- <leader>c is reserved exclusively for C++ (defined in lang/c_cpp.lua)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local buf = args.buf
+    local keys_to_delete = {
+      "<leader>ca", "<leader>cc", "<leader>cd", "<leader>cf", "<leader>cl",
+      "<leader>cr", "<leader>cA", "<leader>cs", "<leader>cm", "<leader>ck",
+    }
+    for _, key in ipairs(keys_to_delete) do
+      pcall(vim.keymap.del, "n", key, { buffer = buf })
+      pcall(vim.keymap.del, "v", key, { buffer = buf })
+    end
+    -- Also delete global ones
+    for _, key in ipairs(keys_to_delete) do
+      pcall(vim.keymap.del, "n", key)
+      pcall(vim.keymap.del, "v", key)
+    end
+  end,
+})
+
 -- ── Terminal ─────────────────────────────────────────────
 map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
 map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Float terminal" })

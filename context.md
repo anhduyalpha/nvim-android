@@ -177,6 +177,14 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #12 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: Reserve <leader>c exclusively for C++, clear all defaults
+- **Completed**:
+  1. `keymaps.lua` — Added LspAttach autocmd to delete all default LazyVim `<leader>c` keymaps (ca/cc/cd/cf/cl/cr/cA/cs/cm/ck)
+  2. `lsp.lua` — Moved Mason from `<leader>cm` → `<leader>um`
+- **Commit**: `fix: reserve <leader>c exclusively for C++, clear all LazyVim defaults`
+
 ### Session #11 — 2026-05-15
 - **Duration**: ~10 min
 - **Worked on**: C++ dedicated keymaps, bits/stdc++.h support, code suggestions
