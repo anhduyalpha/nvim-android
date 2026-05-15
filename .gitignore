@@ -1,0 +1,47 @@
+# Neovim
+*.swp
+*.swo
+*~
+tags
+
+# Lazy.nvim
+lazy-lock.json
+
+# Mason
+mason/
+mason-packages/
+
+# Cache
+.cache/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+package-lock.json
+
+# Rust
+target/
+
+# Go
+vendor/
+
+# User overrides (keep private)
+lua/config/user.lua
+
+# Build artifacts
+*.o
+*.out
+build/
+dist/
+
+# Logs
+*.log
+startup.log
+
+# Undo
+undodir/
