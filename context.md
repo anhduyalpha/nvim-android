@@ -135,6 +135,7 @@ _(None — project complete)_
 ## Known Issues 🐛
 | Issue | Severity | Status | Notes |
 |-------|----------|--------|-------|
+| Plugins not auto-installing on startup | **Critical** | ✅ Fixed | Missing `init.lua` entry point + `vim.loop` deprecated |
 | Java LSP very heavy | Low | By design | Disabled by default, user must opt-in |
 | No Nerd Font in Termux | Low | By design | Using text fallback icons |
 | Copilot needs auth | Low | By design | Disabled by default |
@@ -142,6 +143,16 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #2 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: Fix plugins not auto-installing on startup
+- **Root cause**: Missing `init.lua` entry point at project root + deprecated `vim.loop` usage
+- **Completed**: 
+  - Created `init.lua` (Neovim entry point)
+  - Fixed `vim.loop` → `vim.uv` in `lazy.lua` and `performance.lua`
+  - Removed duplicate leader key from `options.lua`
+- **Commit**: `fix: add init.lua entry point and fix vim.loop deprecation`
+
 ### Session #1 — 2026-05-15
 - **Duration**: ~30 min
 - **Worked on**: Full project implementation

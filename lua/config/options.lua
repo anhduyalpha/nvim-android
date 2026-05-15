@@ -4,10 +4,6 @@
 local android = require("util.android")
 local settings = android.get_platform_settings()
 
--- Leader key
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
 -- ── General ──────────────────────────────────────────────
 vim.opt.mouse = "a"                   -- Enable mouse (useful for touch)
 vim.opt.clipboard = android.is_termux() and "unnamedplus" or ""

@@ -88,7 +88,7 @@ function M.setup_monitor()
   end
 
   -- Check performance every 5 minutes
-  local timer = vim.loop.new_timer()
+  local timer = (vim.uv or vim.loop).new_timer()
   if timer then
     timer:start(0, 300000, vim.schedule_wrap(function()
       M.auto_optimize()
