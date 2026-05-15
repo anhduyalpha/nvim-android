@@ -92,10 +92,8 @@ return {
           },
         }
         dap.configurations.cpp = dap.configurations.c
-      else
-        -- Fallback: use gdb if codelldb not installed
-        vim.notify("⚠️ codelldb not found at: " .. codelldb_path .. "\nRun :MasonInstall codelldb or install gdb manually.", vim.log.levels.WARN)
       end
+      -- Silently skip if codelldb not installed (no warning needed)
     end,
   },
 
@@ -158,11 +156,22 @@ return {
     event = "VeryLazy",
     dependencies = { "mason-org/mason.nvim", "mfussenegger/nvim-dap" },
     opts = {
-      ensure_installed = {
-        "python",
-      },
+      ensure_installed = {},
       -- Disable auto-install to prevent race condition with mason.nvim
       automatic_installation = false,
+      -- Silent handlers — skip missing adapters without warning
+      handlers = {
+        function(config)
+          -- Only setup adapters that are actually installed
+          local ok, mr = pcall(require, "mason-registry")
+          if ok then
+            local pkg_ok, pkg = pcall(mr.get_package, config.name)
+            if pkg_ok and pkg:is_installed() then
+              require("mason-nvim-dap").default_setup(config)
+            end
+          end
+        end,
+      },
     },
   },
 }

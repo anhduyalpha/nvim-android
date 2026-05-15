@@ -56,6 +56,16 @@ return {
       },
       -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
       automatic_installation = false,
+      -- Handler: only setup servers that lspconfig knows about (suppress warnings for non-LSP)
+      handlers = {
+        [1] = function(server_name)
+          local ok, lspconfig = pcall(require, "lspconfig")
+          if ok and lspconfig[server_name] and lspconfig[server_name].setup then
+            lspconfig[server_name].setup({})
+          end
+          -- Silently skip non-LSP tools (no warning)
+        end,
+      },
     },
   },
 
@@ -102,14 +112,36 @@ return {
         }
       end
 
-      -- Setup servers from opts
-      local lspconfig = require("lspconfig")
-      for server, server_opts in pairs(opts.servers) do
-        local final_opts = vim.tbl_deep_extend("force", {
-          capabilities = vim.deepcopy(capabilities),
-        }, server_opts or {})
-        lspconfig[server].setup(final_opts)
+      -- Suppress lspconfig warnings for non-LSP tools during setup
+      local orig_notify = vim.notify
+      vim.notify = function(msg, level, opts)
+        if level == vim.log.levels.WARN and type(msg) == "string" and msg:find("config.*not found") then
+          return -- Skip "config X not found" warnings
+        end
+        return orig_notify(msg, level, opts)
       end
+
+      -- Known valid LSP server names (filter out non-LSP tools like stylua, shfmt, *)
+      local lspconfig = require("lspconfig")
+      local valid_servers = {}
+      for server, _ in pairs(lspconfig) do
+        if type(lspconfig[server]) == "table" and lspconfig[server].setup then
+          valid_servers[server] = true
+        end
+      end
+
+      -- Setup servers from opts (only valid ones)
+      for server, server_opts in pairs(opts.servers) do
+        if valid_servers[server] then
+          local final_opts = vim.tbl_deep_extend("force", {
+            capabilities = vim.deepcopy(capabilities),
+          }, server_opts or {})
+          lspconfig[server].setup(final_opts)
+        end
+      end
+
+      -- Restore original notify
+      vim.notify = orig_notify
     end,
   },
 

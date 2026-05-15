@@ -6,7 +6,7 @@ local android = require("util.android")
 
 -- ── Snacks Explorer ──────────────────────────────────────
 map("n", "t", function()
-  Snacks.picker.explorer({ width = 25 })
+  Snacks.picker.explorer()
 end, { desc = "Toggle Snacks Explorer" })
 map("n", "<S-u>", function()
   -- Focus explorer if already open, otherwise open it
@@ -23,8 +23,34 @@ map("n", "<S-u>", function()
     end
   end
   -- Not open, open it
-  Snacks.picker.explorer({ width = 25 })
+  Snacks.picker.explorer()
 end, { desc = "Focus Snacks Explorer" })
+
+-- ── Explorer: q to close buffer under cursor ─────────────
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "snacks_picker",
+  callback = function(args)
+    vim.keymap.set("n", "q", function()
+      -- Get the file path from the current line in explorer
+      local line = vim.api.nvim_get_current_line()
+      -- Try to close the buffer matching the file
+      local file = line:match("%s+(%S+)$") or line:match("(%S+)$")
+      if file then
+        -- Find and delete the buffer
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+          local name = vim.api.nvim_buf_get_name(buf)
+          if name:match(file:gsub("[%[%]%(%)%*%+%?%.%^%$%%]", "%%%1") .. "$") then
+            vim.api.nvim_buf_delete(buf, { force = false })
+            vim.notify("Closed: " .. file, vim.log.levels.INFO)
+            return
+          end
+        end
+      end
+      -- Fallback: close the picker
+      Snacks.picker.explorer()
+    end, { buffer = args.buf, desc = "Close buffer" })
+  end,
+})
 
 -- ── Better Escape (mobile-friendly) ──────────────────────
 map("i", "jk", "<Esc>", { desc = "Escape insert mode" })

@@ -14,14 +14,26 @@ return {
       notifier = { enabled = false },
       -- Keep picker functional
       picker = { enabled = true },
-      -- Explorer: width 25
-      explorer = { replace_netrw = true },
+      -- Explorer: fixed width 25, q to close buffer
+      explorer = {
+        replace_netrw = true,
+        layout = {
+          layout = {
+            position = "left",
+            width = 25,
+          },
+        },
+      },
       -- Keep input functional
       input = { enabled = true },
       -- Disable indent (we use indent-blankline)
       indent = { enabled = false },
       -- Disable scope (not needed)
       scope = { enabled = false },
+    },
+    -- Explorer keymaps: q to close selected buffer
+    keys = {
+      { "t", function() Snacks.picker.explorer() end, desc = "Toggle Snacks Explorer" },
     },
   },
 
