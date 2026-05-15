@@ -6,7 +6,7 @@ local android = require("util.android")
 
 -- ── Snacks Explorer ──────────────────────────────────────
 map("n", "t", function()
-  Snacks.picker.explorer()
+  Snacks.picker.explorer({ width = 25 })
 end, { desc = "Toggle Snacks Explorer" })
 map("n", "<S-u>", function()
   -- Focus explorer if already open, otherwise open it
@@ -23,7 +23,7 @@ map("n", "<S-u>", function()
     end
   end
   -- Not open, open it
-  Snacks.picker.explorer()
+  Snacks.picker.explorer({ width = 25 })
 end, { desc = "Focus Snacks Explorer" })
 
 -- ── Better Escape (mobile-friendly) ──────────────────────

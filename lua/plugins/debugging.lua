@@ -160,9 +160,9 @@ return {
     opts = {
       ensure_installed = {
         "python",
-        "codelldb",
       },
-      automatic_installation = true,
+      -- Disable auto-install to prevent race condition with mason.nvim
+      automatic_installation = false,
     },
   },
 }

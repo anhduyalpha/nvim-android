@@ -25,15 +25,16 @@ return {
     },
     config = function(_, opts)
       require("mason").setup(opts)
-      -- Auto-install ensure_installed packages (with guard against race)
-      local mr = require("mason-registry")
-      mr:on("package:install:success", function() end)
-      for _, tool in ipairs(opts.ensure_installed) do
-        local ok, p = pcall(mr.get_package, tool)
-        if ok and not p:is_installed() then
-          p:install()
+      -- Auto-install ensure_installed packages (deferred to avoid race with other plugins)
+      vim.schedule(function()
+        local mr = require("mason-registry")
+        for _, tool in ipairs(opts.ensure_installed) do
+          local ok, p = pcall(mr.get_package, tool)
+          if ok and not p:is_installed() and not p:is_installing() then
+            p:install()
+          end
         end
-      end
+      end)
     end,
   },
 
@@ -53,7 +54,8 @@ return {
         "ts_ls",
         "clangd",
       },
-      automatic_installation = not android.is_termux(),
+      -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
+      automatic_installation = false,
     },
   },
 

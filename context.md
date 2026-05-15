@@ -167,6 +167,16 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #7 — 2026-05-15
+- **Duration**: ~10 min
+- **Worked on**: Fix remaining 4 errors + Snacks Explorer width
+- **Completed**:
+  1. `lsp.lua` — Mason race: deferred install with vim.schedule + is_installing() guard; disabled mason-lspconfig automatic_installation (was picking up stylua/shfmt as LSP servers)
+  2. `debugging.lua` — Removed codelldb from mason-nvim-dap ensure_installed, disabled automatic_installation
+  3. `extras.lua` — Added snacks explorer config, removed duplicate t keymap
+  4. `keymaps.lua` — Snacks Explorer width = 25
+- **Commit**: `fix: mason race, lspconfig false-positive servers, explorer width 25`
+
 ### Session #6 — 2026-05-15
 - **Duration**: ~15 min
 - **Worked on**: Debug all startup errors (7 issues)

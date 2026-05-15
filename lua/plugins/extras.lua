@@ -14,6 +14,8 @@ return {
       notifier = { enabled = false },
       -- Keep picker functional
       picker = { enabled = true },
+      -- Explorer: width 25
+      explorer = { replace_netrw = true },
       -- Keep input functional
       input = { enabled = true },
       -- Disable indent (we use indent-blankline)
