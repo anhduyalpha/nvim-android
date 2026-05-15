@@ -143,11 +143,57 @@ map("n", "gr", vim.lsp.buf.references, { desc = "References" })
 map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 
--- ── <leader>c reserved for C++ ───────────────────────────
--- No global overrides needed. C++ keymaps are defined in lang/c_cpp.lua
--- with ft = { "c", "cpp" } — lazy.nvim handles filetype scoping natively.
--- LazyVim default <leader>c keymaps are buffer-local on LspAttach;
--- they won't conflict because c_cpp.lua keys take priority via lazy.nvim keys spec.
+-- ── C++ / C dedicated keymaps (FileType autocmd) ────────
+-- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "c", "cpp" },
+  callback = function(args)
+    local buf = args.buf
+    local o = { buffer = buf, silent = true }
+
+    -- Compile & Run helper
+    local function compile_cpp(opt)
+      local file = vim.fn.expand("%")
+      local out = vim.fn.expand("%:r")
+      local ft = vim.bo.filetype
+      local compiler = ft == "c" and "gcc" or "g++"
+      local std = ft == "c" and "-std=c17" or "-std=c++20"
+      local cmd = string.format("%s %s -O2 -Wall -o %s %s && ./%s", compiler, std, out, file, out)
+      vim.cmd("w")
+      if opt == "compile" then
+        local compile_only = string.format("%s %s -O2 -Wall -o %s %s 2>&1", compiler, std, out, file)
+        local result = vim.fn.system(compile_only)
+        if vim.v.shell_error ~= 0 then
+          vim.notify("❌ Compile error:\n" .. result, vim.log.levels.ERROR)
+        else
+          vim.notify("✅ Compiled: " .. out, vim.log.levels.INFO)
+        end
+      elseif opt == "run" then
+        if vim.fn.filereadable(out) ~= 1 then
+          vim.notify("⚠️ Binary not found. Compile first (<leader>cc)", vim.log.levels.WARN)
+          return
+        end
+        vim.cmd("ToggleTerm cmd='./" .. out .. "'")
+      elseif opt == "build_run" then
+        vim.cmd("ToggleTerm cmd='" .. cmd .. "'")
+      end
+    end
+
+    -- Build & Run
+    vim.keymap.set("n", "<leader>ct", function() compile_cpp("build_run") end, vim.tbl_extend("force", o, { desc = "Build & run file" }))
+    vim.keymap.set("n", "<leader>cc", function() compile_cpp("compile") end, vim.tbl_extend("force", o, { desc = "Compile file" }))
+    vim.keymap.set("n", "<leader>cr", function() compile_cpp("run") end, vim.tbl_extend("force", o, { desc = "Run binary" }))
+    -- LSP actions
+    vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", o, { desc = "Code action" }))
+    vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, vim.tbl_extend("force", o, { desc = "Rename symbol" }))
+    vim.keymap.set("n", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format file" }))
+    vim.keymap.set("v", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format selection" }))
+    vim.keymap.set("n", "<leader>ck", vim.lsp.buf.signature_help, vim.tbl_extend("force", o, { desc = "Signature help" }))
+    vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", vim.tbl_extend("force", o, { desc = "Switch header/source" }))
+    vim.keymap.set("n", "<leader>ci", "<cmd>ClangdSymbolInfo<cr>", vim.tbl_extend("force", o, { desc = "Symbol info" }))
+    vim.keymap.set("n", "<leader>cd", vim.lsp.buf.type_definition, vim.tbl_extend("force", o, { desc = "Type definition" }))
+  end,
+})
 
 -- ── Terminal ─────────────────────────────────────────────
 map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
