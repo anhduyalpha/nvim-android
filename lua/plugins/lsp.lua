@@ -16,8 +16,11 @@ return {
         -- Formatters
         "stylua",
         "shfmt",
+        "clang-format",
         -- Linters
         "shellcheck",
+        -- LSP
+        "clangd",
       },
       -- Mason settings optimized for Termux
       pip = { upgrade_pip = not android.is_termux() },

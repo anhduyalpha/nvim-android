@@ -136,21 +136,12 @@ map("n", "[d", vim.diagnostic.goto_prev, { desc = "Previous diagnostic" })
 map("n", "<leader>dd", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 map("n", "<leader>dq", vim.diagnostic.setloclist, { desc = "Diagnostics to loclist" })
 
--- ── Code Actions ─────────────────────────────────────────
-map("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename symbol" })
-map("n", "<leader>cf", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "Format file" })
-map("v", "<leader>cf", function()
-  require("conform").format({ async = true, lsp_fallback = true })
-end, { desc = "Format selection" })
+-- ── Code Actions (LSP universal — gd, gr, gi, K stay global) ──
 map("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
 map("n", "gD", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "gr", vim.lsp.buf.references, { desc = "References" })
 map("n", "gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
-map("n", "<leader>ck", vim.lsp.buf.signature_help, { desc = "Signature help" })
 
 -- ── Terminal ─────────────────────────────────────────────
 map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })

@@ -141,6 +141,16 @@ _(None — project complete)_
 | `<leader>ha` | Normal | Harpoon add file |
 | `<leader>hh` | Normal | Harpoon menu |
 | `<leader>uz` | Normal | Zen mode |
+| `<leader>ct` | Normal | C++ build & run file |
+| `<leader>cc` | Normal | C++ compile only |
+| `<leader>cr` | Normal | C++ run binary |
+| `<leader>ch` | Normal | Switch header/source |
+| `<leader>cn` | Normal | Rename symbol |
+| `<leader>ca` | Normal | Code action |
+| `<leader>cf` | Normal/Visual | Format |
+| `<leader>ck` | Normal | Signature help |
+| `<leader>ci` | Normal | Symbol info |
+| `<leader>cd` | Normal | Type definition |
 
 ---
 
@@ -167,6 +177,19 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #11 — 2026-05-15
+- **Duration**: ~10 min
+- **Worked on**: C++ dedicated keymaps, bits/stdc++.h support, code suggestions
+- **Completed**:
+  1. `keymaps.lua` — Removed old `<leader>ca/cr/cf/ck` (moved to C++ specific)
+  2. `c_cpp.lua` — Full rewrite: `<leader>ct` build+run, `<leader>cc` compile, `<leader>cr` run, `<leader>ch` header/source, `<leader>ci` symbol info, `<leader>cd` type def, `<leader>ca` code action, `<leader>cn` rename, `<leader>cf` format, `<leader>ck` signature
+  3. `c_cpp.lua` — clangd `--query-driver=/**` for bits/stdc++.h discovery, `--completion-style=detailed`
+  4. `completion.lua` — LuaSnip loads custom snippets from `snippets/` dir
+  5. `snippets/cpp.json` — 16 C++ competitive programming snippets (cp/fori/forr/vec/dfs/bfs/bs etc.)
+  6. `lsp.lua` — Added clangd + clang-format to Mason ensure_installed
+  7. `which-key.lua` — `<leader>c` group renamed to "C++ / Code"
+- **Commit**: `feat: C++ dedicated keymaps, bits/stdc++.h, competitive snippets`
+
 ### Session #10 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: which-key classic layout, Snacks explorer width
