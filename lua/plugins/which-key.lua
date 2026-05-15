@@ -5,31 +5,12 @@ return {
   "folke/which-key.nvim",
   event = "VeryLazy",
   opts = {
+    preset = "classic",
     plugins = { spelling = { enabled = false } },
     -- Instant popup — no delay
     delay = function(ctx)
       return 0
     end,
-    -- Classic layout (vertical list like traditional which-key)
-    -- width/height auto-fit to content
-    layout = {
-      width = { min = 0, max = 100 },
-      height = { min = 0, max = 50 },
-      spacing = 0,
-      align = "left",
-    },
-    win = {
-      border = "rounded",
-      padding = { 0, 1 },
-      title = true,
-      title_pos = "center",
-    },
-    sort = { "order", "group", "alphanum", "mod" },
-    -- Show keys immediately
-    show_help = true,
-    show_keys = true,
-    -- Expand all groups automatically (no nested popup)
-    expand = 0,
   },
   config = function(_, opts)
     local wk = require("which-key")

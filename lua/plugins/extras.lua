@@ -8,6 +8,7 @@ return {
   {
     "folke/snacks.nvim",
     opts = {
+      preset = "defaults",
       -- Disable image rendering (needs kitty graphics protocol, ImageMagick, Ghostscript)
       image = { enabled = false },
       -- Disable notifier on Android (use nvim-notify instead, lighter)
