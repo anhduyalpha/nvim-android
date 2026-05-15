@@ -14,13 +14,13 @@ return {
       notifier = { enabled = false },
       -- Keep picker functional
       picker = { enabled = true },
-      -- Explorer: fixed width 25, q to close buffer
+      -- Explorer: wide enough to show full filenames
       explorer = {
         replace_netrw = true,
         layout = {
           layout = {
             position = "left",
-            width = 25,
+            width = 40,
           },
         },
       },

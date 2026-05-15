@@ -101,48 +101,7 @@ return {
     },
   },
 
-  -- ── Which-key (shows keybinding hints — critical for mobile) ──
-  {
-    "folke/which-key.nvim",
-    event = "VeryLazy",
-    opts = {
-      plugins = { spelling = { enabled = false } },
-      -- Instant popup — no delay
-      delay = function(ctx)
-        return 0
-      end,
-      -- Horizontal layout
-      layout = {
-        width = { min = 20, max = 50 },
-        height = { min = 4, max = 25 },
-        spacing = 3,
-        align = "center",
-      },
-      win = {
-        border = "rounded",
-        padding = { 1, 2 },
-      },
-      sort = { "order", "group", "alphanum", "mod" },
-    },
-    config = function(_, opts)
-      local wk = require("which-key")
-      wk.setup(opts)
-      wk.add({
-        { "<leader>b", group = " Buffer" },
-        { "<leader>c", group = " Code" },
-        { "<leader>d", group = " Debug" },
-        { "<leader>f", group = " Find" },
-        { "<leader>g", group = " Git" },
-        { "<leader>r", group = " 󰐎 Run" },
-        { "<leader>s", group = " Search" },
-        { "<leader>t", group = " Terminal" },
-        { "<leader>u", group = " UI" },
-        { "<leader>w", group = " 󰖲 Window" },
-        { "<leader>x", group = " Quickfix" },
-        { "<leader><tab>", group = " Tab" },
-      })
-    end,
-  },
+  -- ── Which-key → moved to lua/plugins/which-key.lua ────
 
   -- ── Trouble (diagnostics list) ─────────────────────────
   {

@@ -167,6 +167,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #10 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: which-key classic layout, Snacks explorer width
+- **Completed**:
+  1. `which-key.lua` — Created separate file, classic layout, auto-fit width/height (min=0, max=100), left-aligned, expand=0 (no nested popup)
+  2. `editor.lua` — Removed which-key config (moved to which-key.lua)
+  3. `extras.lua` — Snacks Explorer width 25 → 40 for full filename display
+- **Commit**: `feat: which-key classic layout auto-fit, snacks explorer width 40`
+
 ### Session #9 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: which-key instant popup, horizontal layout, q close buffer fix
