@@ -79,24 +79,34 @@ return {
   },
 
   -- ── C/C++ dedicated keymaps ────────────────────────────
+  -- NOTE: NOT attached to neovim/nvim-lspconfig to avoid ft merge conflict
+  -- that would override lsp.lua's event-based loading for ALL languages.
+  -- Uses vim.keymap.set in FileType autocmd — same effect, no plugin merge issue.
   {
-    "neovim/nvim-lspconfig",
+    "c-cpp-keymaps.nvim",
     ft = { "c", "cpp" },
-    keys = {
-      -- Build & Run
-      { "<leader>ct", function() compile_cpp("build_run") end, desc = "Build & run file", ft = { "c", "cpp" } },
-      { "<leader>cc", function() compile_cpp("compile") end, desc = "Compile file", ft = { "c", "cpp" } },
-      { "<leader>cr", function() compile_cpp("run") end, desc = "Run binary", ft = { "c", "cpp" } },
-      -- LSP actions (C++ specific)
-      { "<leader>ca", vim.lsp.buf.code_action, desc = "Code action", ft = { "c", "cpp" } },
-      { "<leader>cn", vim.lsp.buf.rename, desc = "Rename symbol", ft = { "c", "cpp" } },
-      { "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, desc = "Format file", ft = { "c", "cpp" } },
-      { "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, desc = "Format selection", mode = "v", ft = { "c", "cpp" } },
-      { "<leader>ck", vim.lsp.buf.signature_help, desc = "Signature help", ft = { "c", "cpp" } },
-      { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch header/source", ft = { "c", "cpp" } },
-      { "<leader>ci", "<cmd>ClangdSymbolInfo<cr>", desc = "Symbol info", ft = { "c", "cpp" } },
-      { "<leader>cd", vim.lsp.buf.type_definition, desc = "Type definition", ft = { "c", "cpp" } },
-    },
+    config = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "c", "cpp" },
+        callback = function(args)
+          local buf = args.buf
+          local o = { buffer = buf, silent = true }
+          -- Build & Run
+          vim.keymap.set("n", "<leader>ct", function() compile_cpp("build_run") end, vim.tbl_extend("force", o, { desc = "Build & run file" }))
+          vim.keymap.set("n", "<leader>cc", function() compile_cpp("compile") end, vim.tbl_extend("force", o, { desc = "Compile file" }))
+          vim.keymap.set("n", "<leader>cr", function() compile_cpp("run") end, vim.tbl_extend("force", o, { desc = "Run binary" }))
+          -- LSP actions
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", o, { desc = "Code action" }))
+          vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, vim.tbl_extend("force", o, { desc = "Rename symbol" }))
+          vim.keymap.set("n", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format file" }))
+          vim.keymap.set("v", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format selection" }))
+          vim.keymap.set("n", "<leader>ck", vim.lsp.buf.signature_help, vim.tbl_extend("force", o, { desc = "Signature help" }))
+          vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", vim.tbl_extend("force", o, { desc = "Switch header/source" }))
+          vim.keymap.set("n", "<leader>ci", "<cmd>ClangdSymbolInfo<cr>", vim.tbl_extend("force", o, { desc = "Symbol info" }))
+          vim.keymap.set("n", "<leader>cd", vim.lsp.buf.type_definition, vim.tbl_extend("force", o, { desc = "Type definition" }))
+        end,
+      })
+    end,
   },
 
   -- ── CMake support (optional) ───────────────────────────
