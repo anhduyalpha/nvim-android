@@ -69,27 +69,33 @@ return {
       end
 
       -- ── C/C++ (codelldb via Mason) ────────────────────
-      dap.adapters.codelldb = {
-        type = "server",
-        port = "${port}",
-        executable = {
-          command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
-          args = { "--port", "${port}" },
-        },
-      }
-      dap.configurations.c = {
-        {
-          type = "codelldb",
-          request = "launch",
-          name = "Launch file",
-          program = function()
-            return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-          end,
-          cwd = "${workspaceFolder}",
-          stopOnEntry = false,
-        },
-      }
-      dap.configurations.cpp = dap.configurations.c
+      local codelldb_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
+      if vim.fn.filereadable(codelldb_path) == 1 then
+        dap.adapters.codelldb = {
+          type = "server",
+          port = "${port}",
+          executable = {
+            command = codelldb_path,
+            args = { "--port", "${port}" },
+          },
+        }
+        dap.configurations.c = {
+          {
+            type = "codelldb",
+            request = "launch",
+            name = "Launch file",
+            program = function()
+              return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+            end,
+            cwd = "${workspaceFolder}",
+            stopOnEntry = false,
+          },
+        }
+        dap.configurations.cpp = dap.configurations.c
+      else
+        -- Fallback: use gdb if codelldb not installed
+        vim.notify("⚠️ codelldb not found at: " .. codelldb_path .. "\nRun :MasonInstall codelldb or install gdb manually.", vim.log.levels.WARN)
+      end
     end,
   },
 

@@ -4,6 +4,25 @@
 local features = vim.g.nvim_android_features or {}
 
 return {
+  -- ── Snacks.nvim — Disable heavy features on Android ────
+  {
+    "folke/snacks.nvim",
+    opts = {
+      -- Disable image rendering (needs kitty graphics protocol, ImageMagick, Ghostscript)
+      image = { enabled = false },
+      -- Disable notifier on Android (use nvim-notify instead, lighter)
+      notifier = { enabled = false },
+      -- Keep picker functional
+      picker = { enabled = true },
+      -- Keep input functional
+      input = { enabled = true },
+      -- Disable indent (we use indent-blankline)
+      indent = { enabled = false },
+      -- Disable scope (not needed)
+      scope = { enabled = false },
+    },
+  },
+
   -- ── Copilot (AI completion — heavy, default OFF) ───────
   {
     "zbirenbaum/copilot.lua",

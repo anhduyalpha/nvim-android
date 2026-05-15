@@ -136,6 +136,10 @@ _(None — project complete)_
 | Issue | Severity | Status | Notes |
 |-------|----------|--------|-------|
 | Plugins not auto-installing on startup | **Critical** | ✅ Fixed | Missing `init.lua` entry point + `vim.loop` deprecated |
+| lazy.nvim "Invalid spec module: plugins" | **Critical** | ✅ Fixed | `plugins/init.lua` returned nil instead of `{}` |
+| codelldb not found / not executable | Medium | ✅ Fixed | Added file existence check + fallback warning |
+| Snacks.image errors (missing kitty/imagemagick) | Medium | ✅ Fixed | Disabled snacks.image on Android |
+| dressing.nvim vs Snacks conflict | Medium | ✅ Fixed | Removed dressing.nvim, use Snacks for vim.ui |
 | Java LSP very heavy | Low | By design | Disabled by default, user must opt-in |
 | No Nerd Font in Termux | Low | By design | Using text fallback icons |
 | Copilot needs auth | Low | By design | Disabled by default |
@@ -143,6 +147,16 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #3 — 2026-05-15
+- **Duration**: ~10 min
+- **Worked on**: Fix 4 critical startup/runtime errors
+- **Completed**:
+  1. `plugins/init.lua` — Changed from nil-returning comments to `return {}`
+  2. `debugging.lua` — Added codelldb path existence check + warning fallback
+  3. `extras.lua` — Added snacks.nvim override to disable image/notifier/indent on Android
+  4. `ui.lua` — Disabled dressing.nvim (conflicts with Snacks vim.ui override)
+- **Commit**: `fix: resolve lazy.nvim spec error, codelldb path, snacks.image, dressing conflict`
+
 ### Session #2 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: Fix plugins not auto-installing on startup

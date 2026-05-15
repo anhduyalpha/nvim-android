@@ -150,17 +150,19 @@ return {
   },
 
   -- ── Better UI for select/input ─────────────────────────
-  {
-    "stevearc/dressing.nvim",
-    event = "VeryLazy",
-    opts = {
-      input = { enabled = true },
-      select = {
-        enabled = true,
-        backend = { "telescope", "fzf", "builtin" },
-      },
-    },
-  },
+  -- DISABLED: LazyVim uses Snacks.input/Snacks.picker for vim.ui
+  -- Having dressing.nvim causes conflict (overrides vim.ui.input/select)
+  -- {
+  --   "stevearc/dressing.nvim",
+  --   event = "VeryLazy",
+  --   opts = {
+  --     input = { enabled = true },
+  --     select = {
+  --       enabled = true,
+  --       backend = { "telescope", "fzf", "builtin" },
+  --     },
+  --   },
+  -- },
 
   -- ── Notifications (basic, no fancy animations) ─────────
   {
