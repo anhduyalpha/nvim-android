@@ -177,6 +177,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #13 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: Fix overlapping UI + C++ keymaps not working (regression from Session #12)
+- **Root cause**: Session #12 used global `<nop>` for ALL `<leader>c*` keys — this blocked C++ filetype-specific keymaps from `c_cpp.lua` and caused which-key to show both `<nop>` and C++ groups simultaneously
+- **Completed**:
+  1. `keymaps.lua` — Removed global `<nop>` override and LspAttach autocmd cleanup for `<leader>c*`
+  2. C++ keymaps in `c_cpp.lua` work natively via lazy.nvim `ft = { "c", "cpp" }` scoping
+- **Commit**: `fix: remove global <nop> blocking C++ keymaps, resolve overlapping which-key display`
+
 ### Session #12 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: Reserve <leader>c exclusively for C++, clear all defaults
