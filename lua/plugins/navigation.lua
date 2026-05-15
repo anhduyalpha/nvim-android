@@ -15,6 +15,8 @@ return {
       { "<leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
       { "<leader>fr", "<cmd>Telescope oldfiles<cr>", desc = "Recent files" },
       { "<leader>fs", "<cmd>Telescope grep_string<cr>", desc = "Grep string" },
+      { "<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Grep buffer" },
+      { "<leader>sB", "<cmd>Telescope live_grep<cr>", desc = "Grep lines" },
       { "<leader>fd", "<cmd>Telescope diagnostics<cr>", desc = "Diagnostics" },
       { "<leader>fc", "<cmd>Telescope commands<cr>", desc = "Commands" },
       { "<leader>fk", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },

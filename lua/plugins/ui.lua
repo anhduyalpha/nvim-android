@@ -164,7 +164,7 @@ return {
   --   },
   -- },
 
-  -- ── Notifications (basic, no fancy animations) ─────────
+  -- ── Notifications (pretty, with noice integration) ──────
   {
     "rcarriga/nvim-notify",
     event = "VeryLazy",
@@ -173,8 +173,16 @@ return {
       max_height = function() return math.floor(vim.o.lines * 0.75) end,
       max_width = function() return math.floor(vim.o.columns * 0.75) end,
       render = "compact",
-      stages = "static",  -- No animations on Android
+      stages = "fade_in_slide_out",
       background_colour = "#000000",
+      top_down = false,
+      icons = {
+        ERROR = " ",
+        WARN = " ",
+        INFO = " ",
+        DEBUG = " ",
+        TRACE = "✎ ",
+      },
     },
   },
 }

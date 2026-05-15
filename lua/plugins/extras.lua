@@ -139,6 +139,8 @@ return {
           ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
           ["vim.lsp.util.stylize_markdown"] = true,
         },
+        hover = { enabled = true, silent = true },
+        signature = { enabled = true },
       },
       -- Presets: enable beautiful UI components
       presets = {
@@ -183,6 +185,18 @@ return {
           view = "mini",
           filter = { event = "msg_show", kind = "search_count" },
         },
+        {
+          view = "mini",
+          filter = { event = "msg_show", find = "Pattern not found" },
+        },
+        {
+          view = "notify",
+          filter = { event = "msg_show", kind = "emsg" },
+        },
+        {
+          view = "notify",
+          filter = { event = "msg_show", kind = "wmsg" },
+        },
       },
       -- Views: customize popup appearance
       views = {
@@ -202,6 +216,12 @@ return {
           win_options = {
             winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
           },
+        },
+        mini = {
+          timeout = 2000,
+          reverse = true,
+          align = "message",
+          position = { row = -2, col = -2 },
         },
       },
     },

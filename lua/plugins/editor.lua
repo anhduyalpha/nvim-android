@@ -107,24 +107,35 @@ return {
     event = "VeryLazy",
     opts = {
       plugins = { spelling = { enabled = false } },
-      window = { border = "rounded" },
+      layout = {
+        height = { min = 4, max = 25 },
+        width = { min = 20, max = 50 },
+        spacing = 3,
+        align = "center",
+      },
+      window = {
+        border = "rounded",
+        margin = { 1, 1, 1, 1 },
+        padding = { 1, 2, 1, 2 },
+      },
+      sort = { "order", "group", "alphanum", "mod" },
     },
     config = function(_, opts)
       local wk = require("which-key")
       wk.setup(opts)
       wk.register({
-        ["<leader>b"] = { name = "+buffer" },
-        ["<leader>c"] = { name = "+code" },
-        ["<leader>d"] = { name = "+debug/diagnostic" },
-        ["<leader>f"] = { name = "+find/file" },
-        ["<leader>g"] = { name = "+git" },
-        ["<leader>r"] = { name = "+run" },
-        ["<leader>s"] = { name = "+search" },
-        ["<leader>t"] = { name = "+terminal" },
-        ["<leader>u"] = { name = "+ui" },
-        ["<leader>w"] = { name = "+window" },
-        ["<leader>x"] = { name = "+quickfix" },
-        ["<leader><tab>"] = { name = "+tab" },
+        ["<leader>b"] = { name = " Buffer" },
+        ["<leader>c"] = { name = " Code" },
+        ["<leader>d"] = { name = " Debug" },
+        ["<leader>f"] = { name = " Find" },
+        ["<leader>g"] = { name = " Git" },
+        ["<leader>r"] = { name = " 󰐎 Run" },
+        ["<leader>s"] = { name = " Search" },
+        ["<leader>t"] = { name = " Terminal" },
+        ["<leader>u"] = { name = " UI" },
+        ["<leader>w"] = { name = " 󰖲 Window" },
+        ["<leader>x"] = { name = " Quickfix" },
+        ["<leader><tab>"] = { name = " Tab" },
       })
     end,
   },

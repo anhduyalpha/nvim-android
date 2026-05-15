@@ -129,6 +129,8 @@ _(None — project complete)_
 |-----|------|--------|
 | `t` | Normal | Toggle Snacks Explorer |
 | `<S-u>` | Normal | Focus Snacks Explorer (open or focus existing) |
+| `<leader>sb` | Normal | Grep in current buffer (Telescope) |
+| `<leader>sB` | Normal | Live grep across files (Telescope) |
 | `<leader>db` | Normal | Toggle breakpoint |
 | `<leader>dc` | Normal | DAP continue |
 | `<leader>du` | Normal | Toggle DAP UI |
@@ -165,6 +167,17 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #5 — 2026-05-15
+- **Duration**: ~10 min
+- **Worked on**: UI polish, keybinding refinement, noice enhancement
+- **Completed**:
+  1. `navigation.lua` — Added `<leader>sb` (grep buffer) and `<leader>sB` (grep lines/live_grep)
+  2. `editor.lua` — Enhanced which-key layout: horizontal layout, icons, better spacing/border
+  3. `extras.lua` — Enhanced noice: LSP hover/sig, more routes (emsg/wmsg/pattern-not-found), mini view styling
+  4. `ui.lua` — Enhanced nvim-notify: fade_in_slide_out animation, bottom-up, icon set
+  5. `context.md` — Updated session history
+- **Commit**: `feat: polish UI, which-key horizontal layout, enhanced noice/notify, sb/sB grep`
+
 ### Session #4 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: Enable noice.nvim, Snacks Explorer keybindings, command palette UI
