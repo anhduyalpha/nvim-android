@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "skills": {
+    "miaoda-app-builder": {
+      "version": "1.0.12",
+      "installedAt": 1778859321338
+    },
+    "chrome-extension-studio": {
+      "version": "1.0.0",
+      "installedAt": 1778859321418
+    },
+    "agentic-codex-dev": {
+      "version": "0.3.6",
+      "installedAt": 1778859321493
+    },
+    "code-review-promax": {
+      "version": "0.1.93",
+      "installedAt": 1778859321866
+    },
+    "verified-code": {
+      "version": "1.0.6",
+      "installedAt": 1778859322238
+    },
+    "code-assist": {
+      "version": "1.0.0",
+      "installedAt": 1778859322485
+    },
+    "openclaw-fullstack-app": {
+      "version": "1.0.0",
+      "installedAt": 1778859325504
+    },
+    "eb-software-architect": {
+      "version": "1.0.0",
+      "installedAt": 1778859325546
+    },
+    "system-architect": {
+      "version": "1.0.0",
+      "installedAt": 1778859325752
+    },
+    "ah-architect-reviewer": {
+      "version": "1.0.0",
+      "installedAt": 1778859326309
+    },
+    "frontend-architecture-pro": {
+      "version": "1.0.4",
+      "installedAt": 1778859326523
+    },
+    "dark-architecture-diagram": {
+      "version": "1.0.0",
+      "installedAt": 1778859326601
+    },
+    "scan-to-markdown": {
+      "version": "1.0.0",
+      "installedAt": 1778859328800
+    },
+    "ocr-document": {
+      "version": "1.0.0",
+      "installedAt": 1778859328836
+    },
+    "artifact-deck": {
+      "version": "1.0.6",
+      "installedAt": 1778859329433
+    },
+    "task-orchestra": {
+      "version": "1.0.0",
+      "installedAt": 1778859329744
+    },
+    "skill-creator-promax": {
+      "version": "0.1.88",
+      "installedAt": 1778859329874
+    },
+    "edvisage-agent-connect": {
+      "version": "1.0.1",
+      "installedAt": 1778859329928
+    },
+    "trusted-clawhub-install-gate": {
+      "version": "0.2.2",
+      "installedAt": 1778859332021
+    },
+    "skill-security-audit": {
+      "version": "1.0.0",
+      "installedAt": 1778859332075
+    },
+    "skill-review-pro": {
+      "version": "0.1.92",
+      "installedAt": 1778859333114
+    },
+    "perf-profiler": {
+      "version": "1.0.0",
+      "installedAt": 1778859333300
+    },
+    "skill-net": {
+      "version": "3.1.0",
+      "installedAt": 1778859334035
+    },
+    "test-master": {
+      "version": "0.1.0",
+      "installedAt": 1778859334121
+    }
+  }
+}
