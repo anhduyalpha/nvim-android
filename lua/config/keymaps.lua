@@ -4,6 +4,28 @@
 local map = vim.keymap.set
 local android = require("util.android")
 
+-- ── Snacks Explorer ──────────────────────────────────────
+map("n", "t", function()
+  Snacks.picker.explorer()
+end, { desc = "Toggle Snacks Explorer" })
+map("n", "<S-u>", function()
+  -- Focus explorer if already open, otherwise open it
+  local ok, snacks = pcall(require, "snacks")
+  if ok and snacks.picker then
+    -- Try to find and focus existing explorer window
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      local buf = vim.api.nvim_win_get_buf(win)
+      local ft = vim.bo[buf].filetype
+      if ft:match("snacks") then
+        vim.api.nvim_set_current_win(win)
+        return
+      end
+    end
+  end
+  -- Not open, open it
+  Snacks.picker.explorer()
+end, { desc = "Focus Snacks Explorer" })
+
 -- ── Better Escape (mobile-friendly) ──────────────────────
 map("i", "jk", "<Esc>", { desc = "Escape insert mode" })
 map("i", "jj", "<Esc>", { desc = "Escape insert mode (alt)" })

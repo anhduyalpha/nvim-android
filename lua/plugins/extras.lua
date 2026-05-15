@@ -123,18 +123,87 @@ return {
     config = true,
   },
 
-  -- ── Noice (UI heavy — default OFF on Android) ──────────
+  -- ── Noice — Beautiful cmdline/messages/search UI ───────
   {
     "folke/noice.nvim",
-    enabled = features.noice == true,
+    enabled = features.noice ~= false,
     event = "VeryLazy",
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
     },
     opts = {
-      lsp = { override = { ["vim.lsp.util.convert_input_to_markdown_lines"] = true } },
-      presets = { bottom_search = true, command_palette = true, long_message_to_split = true },
+      -- LSP: hover/rename/signature as floating markdown
+      lsp = {
+        override = {
+          ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+          ["vim.lsp.util.stylize_markdown"] = true,
+        },
+      },
+      -- Presets: enable beautiful UI components
+      presets = {
+        bottom_search = false,         -- Use popup search instead of bottom bar
+        command_palette = true,        -- Centered command palette (like VSCode)
+        long_message_to_split = true,  -- Long messages go to split
+        lsp_doc_border = true,         -- Border on LSP hover docs
+      },
+      -- Cmdline: popup style for : commands
+      cmdline = {
+        view = "cmdline_popup",        -- Show : command in centered popup
+        format = {
+          cmdline = { pattern = "^:", icon = " ", lang = "vim", title = " Command " },
+          search_down = { kind = "search", pattern = "^/", icon = " ", lang = "regex", title = " Search " },
+          search_up = { kind = "search", pattern = "^%?", icon = " ", lang = "regex", title = " Search " },
+          filter = { pattern = "^:%s*!", icon = " ", title = " Shell " },
+          lua = { pattern = "^:%s*lua%s+", icon = " ", lang = "lua", title = " Lua " },
+          help = { pattern = "^:%s*he?l?p?%s+", icon = " " },
+          input = { view = "cmdline_input", icon = " " },
+        },
+      },
+      -- Messages: route through noice for pretty display
+      messages = {
+        enabled = true,
+        view = "notify",
+        view_error = "notify",
+        view_warn = "notify",
+        view_history = "messages",
+      },
+      -- Popupmenu: beautiful completion menu for : commands
+      popupmenu = {
+        enabled = true,
+        backend = "nui",              -- Use nui for pretty popupmenu
+      },
+      -- Routes: customize how different message types are displayed
+      routes = {
+        {
+          view = "mini",
+          filter = { event = "msg_show", kind = "", find = "written" },
+        },
+        {
+          view = "mini",
+          filter = { event = "msg_show", kind = "search_count" },
+        },
+      },
+      -- Views: customize popup appearance
+      views = {
+        cmdline_popup = {
+          position = { row = "40%", col = "50%" },
+          size = { width = 60, height = "auto" },
+          border = { style = "rounded", padding = { 0, 1 } },
+          win_options = {
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = { row = "47%", col = "50%" },
+          size = { width = 60, height = 10 },
+          border = { style = "rounded", padding = { 0, 1 } },
+          win_options = {
+            winhighlight = "NormalFloat:NormalFloat,FloatBorder:FloatBorder",
+          },
+        },
+      },
     },
   },
 }

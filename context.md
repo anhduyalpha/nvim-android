@@ -124,6 +124,24 @@ _(None — project complete)_
 
 ---
 
+## Key Bindings Reference 🎹
+| Key | Mode | Action |
+|-----|------|--------|
+| `t` | Normal | Toggle Snacks Explorer |
+| `<S-u>` | Normal | Focus Snacks Explorer (open or focus existing) |
+| `<leader>db` | Normal | Toggle breakpoint |
+| `<leader>dc` | Normal | DAP continue |
+| `<leader>du` | Normal | Toggle DAP UI |
+| `<leader>ca` | Normal | Code action |
+| `<leader>cr` | Normal | Rename symbol |
+| `<leader>cf` | Normal/Visual | Format |
+| `<leader>tt` | Normal | Toggle terminal |
+| `<leader>ha` | Normal | Harpoon add file |
+| `<leader>hh` | Normal | Harpoon menu |
+| `<leader>uz` | Normal | Zen mode |
+
+---
+
 ## What's Next 📋
 1. [ ] User testing on actual Android device
 2. [ ] Gather feedback and fix issues
@@ -147,6 +165,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #4 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: Enable noice.nvim, Snacks Explorer keybindings, command palette UI
+- **Completed**:
+  1. `options.lua` — Enabled noice feature toggle (`noice = true`)
+  2. `extras.lua` — Full noice.nvim config: cmdline popup, popupmenu (nui), messages routing, LSP doc border, search popup, routes
+  3. `keymaps.lua` — Added `t` toggle Snacks Explorer, `<S-u>` focus Snacks Explorer
+- **Commit**: `feat: enable noice cmdline UI, snacks explorer keybindings`
+
 ### Session #3 — 2026-05-15
 - **Duration**: ~10 min
 - **Worked on**: Fix 4 critical startup/runtime errors

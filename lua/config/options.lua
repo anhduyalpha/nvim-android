@@ -105,7 +105,7 @@ end
 -- ── Feature Toggles (user can override in config/user.lua) ──
 vim.g.nvim_android_features = {
   copilot = false,           -- AI heavy
-  noice = false,             -- UI heavy
+  noice = true,              -- UI for messages/cmdline/search (light on Android)
   java_lsp = false,          -- Very heavy
   fancy_dashboard = true,    -- Light, keep
   git_signs = true,          -- Light, keep
