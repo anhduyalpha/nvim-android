@@ -156,7 +156,7 @@ return {
     "jay-babu/mason-nvim-dap.nvim",
     enabled = features.debug ~= false,
     event = "VeryLazy",
-    dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
+    dependencies = { "mason-org/mason.nvim", "mfussenegger/nvim-dap" },
     opts = {
       ensure_installed = {
         "python",

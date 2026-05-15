@@ -16,6 +16,9 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+-- Suppress LazyVim plugin order check (we control our own import order)
+vim.g.lazyvim_check_order = false
+
 -- Lazy.nvim configuration optimized for Android
 require("lazy").setup({
   spec = {

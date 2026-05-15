@@ -75,49 +75,18 @@ return {
   },
 
   -- ── Dashboard ──────────────────────────────────────────
-  {
-    "goolord/alpha-nvim",
-    event = "VimEnter",
-    enabled = features.fancy_dashboard ~= false,
-    config = function()
-      local alpha = require("alpha")
-      local dashboard = require("alpha.themes.dashboard")
-
-      dashboard.section.header.val = {
-        "                                                     ",
-        "  ███╗   ██╗██╗   ██╗██╗███╗   ███╗                  ",
-        "  ████╗  ██║██║   ██║██║████╗ ████║                  ",
-        "  ██╔██╗ ██║██║   ██║██║██╔████╔██║                  ",
-        "  ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║                  ",
-        "  ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║                  ",
-        "  ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝                  ",
-        "           [ Android IDE powered by LazyVim ]         ",
-        "                                                     ",
-      }
-
-      dashboard.section.buttons.val = {
-        dashboard.button("f", "  Find File", "<cmd>Telescope find_files<cr>"),
-        dashboard.button("r", "  Recent Files", "<cmd>Telescope oldfiles<cr>"),
-        dashboard.button("g", "  Live Grep", "<cmd>Telescope live_grep<cr>"),
-        dashboard.button("n", "  New File", "<cmd>ene<cr>"),
-        dashboard.button("c", "  Config", "<cmd>e $MYVIMRC<cr>"),
-        dashboard.button("u", "  Update Plugins", "<cmd>Lazy update<cr>"),
-        dashboard.button("q", "  Quit", "<cmd>qa<cr>"),
-      }
-
-      dashboard.section.header.opts.hl = "AlphaHeader"
-      dashboard.section.buttons.opts.hl = "AlphaButtons"
-      dashboard.section.footer.opts.hl = "AlphaFooter"
-
-      -- Footer with plugin stats
-      dashboard.section.footer.val = function()
-        local stats = require("lazy").stats()
-        return string.format("⚡ %d plugins loaded in %dms", stats.count, stats.startuptime)
-      end
-
-      alpha.setup(dashboard.opts)
-    end,
-  },
+  -- DISABLED: LazyVim uses Snacks dashboard by default
+  -- alpha-nvim conflicts with LazyVim's snacks_picker.lua (button field nil)
+  -- {
+  --   "goolord/alpha-nvim",
+  --   event = "VimEnter",
+  --   enabled = features.fancy_dashboard ~= false,
+  --   config = function()
+  --     local alpha = require("alpha")
+  --     local dashboard = require("alpha.themes.dashboard")
+  --     ...
+  --   end,
+  -- },
 
   -- ── Indent guides ──────────────────────────────────────
   {

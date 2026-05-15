@@ -35,7 +35,7 @@ return {
         -- Disable for large files (performance)
         disable = function(lang, buf)
           local max_filelength = 10000
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
           if ok and stats and stats.size > max_filelength then
             return true
           end
@@ -55,6 +55,20 @@ return {
           node_decremental = "<bs>",
         },
       },
+    },
+    config = function(_, opts)
+      -- New nvim-treesitter uses opts table directly via lazy.nvim
+      -- No need for require("nvim-treesitter.configs").setup()
+      -- The opts are applied automatically by lazy.nvim
+    end,
+  },
+
+  -- ── Treesitter textobjects (separate plugin) ───────────
+  {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    opts = {
       textobjects = {
         select = {
           enable = true,
@@ -101,16 +115,6 @@ return {
         },
       },
     },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-    end,
-  },
-
-  -- ── Treesitter textobjects (separate plugin) ───────────
-  {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    event = { "BufReadPost", "BufNewFile" },
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
   },
 
   -- ── Context (show function/class header at top) ────────

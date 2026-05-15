@@ -167,6 +167,18 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #6 — 2026-05-15
+- **Duration**: ~15 min
+- **Worked on**: Debug all startup errors (7 issues)
+- **Completed**:
+  1. `lsp.lua` — Renamed mason/mason-lspconfig to mason-org/*, removed broken LazyVim extras import, removed none-ls conflict, fixed mason race condition
+  2. `treesitter.lua` — Removed deprecated `nvim-treesitter.configs` module, use opts directly, moved textobjects to separate plugin spec
+  3. `editor.lua` — Renamed mini.nvim to nvim-mini/mini.nvim, fixed which-key to v3 API (`wk.add()` instead of `wk.register()`, `win` instead of `window`)
+  4. `ui.lua` — Disabled alpha-nvim (conflicts with LazyVim snacks_picker)
+  5. `lazy.lua` — Added `vim.g.lazyvim_check_order = false` to suppress import order warning
+  6. `debugging.lua` — Updated mason dependency to mason-org
+- **Commit**: `fix: resolve 7 startup errors — plugin renames, treesitter API, which-key v3, mason race, alpha conflict`
+
 ### Session #5 — 2026-05-15
 - **Duration**: ~10 min
 - **Worked on**: UI polish, keybinding refinement, noice enhancement

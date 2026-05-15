@@ -1,15 +1,12 @@
--- plugins/lsp.lua — LSP configuration with LazyVim lsp extras
+-- plugins/lsp.lua — LSP configuration for LazyVim
 -- Lazy-loaded per filetype, memory-optimized for Android
 
 local android = require("util.android")
 
 return {
-  -- ── LazyVim LSP extras ─────────────────────────────────
-  { "LazyVim/LazyVim", import = "lazyvim.plugins.extras.lsp" },
-
   -- ── Mason (LSP installer) ──────────────────────────────
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     cmd = "Mason",
     keys = {
       { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" },
@@ -28,11 +25,12 @@ return {
     },
     config = function(_, opts)
       require("mason").setup(opts)
-      -- Auto-install ensure_installed packages
+      -- Auto-install ensure_installed packages (with guard against race)
       local mr = require("mason-registry")
+      mr:on("package:install:success", function() end)
       for _, tool in ipairs(opts.ensure_installed) do
-        local p = mr.get_package(tool)
-        if not p:is_installed() then
+        local ok, p = pcall(mr.get_package, tool)
+        if ok and not p:is_installed() then
           p:install()
         end
       end
@@ -41,10 +39,10 @@ return {
 
   -- ── Mason-LSPConfig bridge ─────────────────────────────
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
+      "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",
     },
     opts = {
@@ -64,8 +62,8 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
+      "mason-org/mason.nvim",
+      "mason-org/mason-lspconfig.nvim",
     },
     opts = {
       -- Global LSP settings
@@ -110,34 +108,6 @@ return {
         }, server_opts or {})
         lspconfig[server].setup(final_opts)
       end
-    end,
-  },
-
-  -- ── Null-ls (formatters & linters) ─────────────────────
-  {
-    "nvimtools/none-ls.nvim",
-    event = { "BufReadPre", "BufNewFile" },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = function()
-      local nls = require("null-ls")
-      return {
-        sources = {
-          -- Formatters
-          nls.builtins.formatting.stylua,
-          nls.builtins.formatting.shfmt,
-          nls.builtins.formatting.black,
-          nls.builtins.formatting.prettier.with({
-            condition = function()
-              return android.has_feature("node")
-            end,
-          }),
-          nls.builtins.formatting.rustfmt,
-          nls.builtins.formatting.gofmt,
-          nls.builtins.formatting.clang_format,
-          -- Diagnostics
-          nls.builtins.diagnostics.shellcheck,
-        },
-      }
     end,
   },
 
