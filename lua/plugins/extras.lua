@@ -14,13 +14,13 @@ return {
       notifier = { enabled = false },
       -- Keep picker functional
       picker = { enabled = true },
-      -- Explorer: wide enough to show full filenames
+      -- Explorer: responsive width based on terminal size
       explorer = {
         replace_netrw = true,
         layout = {
           layout = {
             position = "left",
-            width = 40,
+            width = math.max(30, math.floor(vim.o.columns * 0.25)),
           },
         },
       },
