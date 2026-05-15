@@ -26,31 +26,47 @@ map("n", "<S-u>", function()
   Snacks.picker.explorer()
 end, { desc = "Focus Snacks Explorer" })
 
--- ── Explorer: q to close buffer under cursor ─────────────
+-- ── Explorer: q to close buffer in explorer only ─────────
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "snacks_picker",
   callback = function(args)
     vim.keymap.set("n", "q", function()
-      -- Get the file path from the current line in explorer
-      local line = vim.api.nvim_get_current_line()
-      -- Try to close the buffer matching the file
-      local file = line:match("%s+(%S+)$") or line:match("(%S+)$")
-      if file then
-        -- Find and delete the buffer
-        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-          local name = vim.api.nvim_buf_get_name(buf)
-          if name:match(file:gsub("[%[%]%(%)%*%+%?%.%^%$%%]", "%%%1") .. "$") then
-            vim.api.nvim_buf_delete(buf, { force = false })
-            vim.notify("Closed: " .. file, vim.log.levels.INFO)
-            return
-          end
-        end
-      end
-      -- Fallback: close the picker
-      Snacks.picker.explorer()
-    end, { buffer = args.buf, desc = "Close buffer" })
+      -- Close the picker/explorer window
+      local win = vim.api.nvim_get_current_win()
+      vim.api.nvim_win_close(win, true)
+    end, { buffer = args.buf, desc = "Close explorer" })
   end,
 })
+
+-- ── q to close buffer (normal mode) ─────────────────────
+map("n", "q", function()
+  -- Don't close if in special buffers
+  local ft = vim.bo.filetype
+  local bt = vim.bo.buftype
+  if ft == "snacks_picker" or ft == "neo-tree" or ft == "Trouble" or ft == "help" or ft == "qf" or bt == "terminal" then
+    return "q"
+  end
+  -- Close buffer, keep window
+  local buf = vim.api.nvim_get_current_buf()
+  if vim.bo.modified then
+    local choice = vim.fn.confirm("Buffer modified. Save?", "&Yes\n&No\n&Cancel")
+    if choice == 1 then
+      vim.cmd("w")
+    elseif choice == 3 then
+      return
+    end
+  end
+  -- Switch to alternate buffer or previous, then delete
+  local alt = vim.fn.bufnr("#")
+  if alt > 0 and vim.api.nvim_buf_is_valid(alt) and alt ~= buf then
+    vim.cmd("buffer #")
+  else
+    vim.cmd("bprevious")
+  end
+  if vim.api.nvim_buf_is_valid(buf) then
+    vim.api.nvim_buf_delete(buf, { force = false })
+  end
+end, { desc = "Close buffer" })
 
 -- ── Better Escape (mobile-friendly) ──────────────────────
 map("i", "jk", "<Esc>", { desc = "Escape insert mode" })

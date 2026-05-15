@@ -167,6 +167,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #9 — 2026-05-15
+- **Duration**: ~5 min
+- **Worked on**: which-key instant popup, horizontal layout, q close buffer fix
+- **Completed**:
+  1. `editor.lua` — which-key delay = 0 (instant), horizontal layout with spacing/align
+  2. `options.lua` — timeoutlen = 0 for instant leader key response
+  3. `keymaps.lua` — Global `q` to close buffer (with save prompt), explorer q closes picker window, skip special buffers
+- **Commit**: `fix: which-key instant popup, horizontal layout, q close buffer`
+
 ### Session #8 — 2026-05-15
 - **Duration**: ~10 min
 - **Worked on**: Eliminate all remaining warnings, explorer width, q key

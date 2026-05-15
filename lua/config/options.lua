@@ -47,7 +47,7 @@ vim.opt.shiftround = true             -- Round indent to shiftwidth
 
 -- ── Performance (Android-optimized) ─────────────────────
 vim.opt.updatetime = settings.update_time  -- Increased from 250ms
-vim.opt.timeoutlen = 500              -- Key timeout
+vim.opt.timeoutlen = 0              -- Instant leader key response
 vim.opt.ttimeoutlen = 10              -- Key code timeout
 vim.opt.lazyredraw = true             -- Don't redraw while executing macros
 vim.opt.synmaxcol = 200               -- Limit syntax highlight columns
