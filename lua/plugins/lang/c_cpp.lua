@@ -1,55 +1,35 @@
--- plugins/lang/c_cpp.lua — C/C++ language support
--- Uses LazyVim default completion (blink.cmp or nvim-cmp managed by LazyVim).
--- Only clangd LSP args are customized for Termux paths.
+-- ╭────────────────────────────────────────────────────────────────╮
+-- │  cpp.lua — C++ specific plugins (mirrored from nvim_conf)      │
+-- │  Termux: clangd installed via `pkg install clang`              │
+-- ╰────────────────────────────────────────────────────────────────╯
+
+local clangd_cmd = {
+  "clangd",
+  "--background-index",
+  "--clang-tidy",
+  "--header-insertion=iwyu",
+  "--completion-style=detailed",
+  "--function-arg-placeholders",
+  "--fallback-style=llvm",
+  -- Termux-specific: find system headers from pkg-installed compilers
+  "--query-driver=/data/data/com.termux/files/usr/bin/*",
+  "--pch-storage=disk", -- save RAM on Android
+  "-j=2",              -- limit threads on mobile
+}
 
 return {
-  -- ── C/C++ formatter ────────────────────────────────────
-  {
-    "stevearc/conform.nvim",
-    opts = {
-      formatters_by_ft = {
-        c   = { "clang_format" },
-        cpp = { "clang_format" },
-      },
-    },
-  },
-
-  -- ── CMake support ──────────────────────────────────────
-  {
-    "Civitasv/cmake-tools.nvim",
-    ft   = { "cmake" },
-    opts = {
-      cmake_build_directory      = "build",
-      cmake_generate_options     = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" },
-    },
-  },
-
-  -- ── clangd LSP (Termux-tuned) ──────────────────────────
-  -- clangd is installed via:  pkg install clang
-  -- No Mason involvement — paths point directly to Termux binaries.
+  -- ── clangd LSP ─────────────────────────────────────────────────
   {
     "neovim/nvim-lspconfig",
+    event = "FileType",
     opts = {
       servers = {
         clangd = {
-          cmd = {
-            "clangd",
-            "--background-index",
-            "--clang-tidy",
-            "--header-insertion=iwyu",
-            "--completion-style=detailed",
-            "--function-arg-placeholders",
-            "--fallback-style=llvm",
-            -- Point to ALL Termux compilers so clangd finds system headers.
-            "--query-driver=/data/data/com.termux/files/usr/bin/*",
-            "--suggest-missing-includes",
-            "--pch-storage=disk",   -- saves RAM on Android
-            "-j=2",                  -- limit threads on mobile CPU
-            "--log=error",
-          },
-          filetypes          = { "c", "cpp", "objc", "objcpp" },
+          mason = false, -- installed via: pkg install clang
+          cmd = clangd_cmd,
+          filetypes = { "c", "cpp", "objc", "objcpp" },
           single_file_support = true,
-          root_dir           = function(fname)
+          root_dir = function(fname)
             return require("lspconfig.util").root_pattern(
               "compile_commands.json",
               "compile_flags.txt",
@@ -57,6 +37,11 @@ return {
               ".git"
             )(fname) or vim.fn.getcwd()
           end,
+          init_options = {
+            usePlaceholders = true,
+            completeUnimported = true,
+            clangdFileStatus = true,
+          },
           settings = {
             clangd = { inlayHints = { enabled = false } },
           },
@@ -65,14 +50,46 @@ return {
     },
   },
 
-  -- ── Clangd extensions (lightweight UI extras) ──────────
+  -- ── Clangd extensions (AST explorer, type info) ────────────────
   {
     "p00f/clangd_extensions.nvim",
-    ft   = { "c", "cpp", "objc", "objcpp" },
+    optional = true,
     opts = {
-      ast         = { role_icons = {}, kind_icons = {} },
-      memory_usage = { border = "rounded" },
-      symbol_info  = { border = "rounded" },
+      extensions = {
+        inlay_hints = {
+          inline = false,
+        },
+        ast = {
+          role_icons = {
+            type = "",
+            declaration = "",
+            expression = "",
+            specifier = "",
+            statement = "",
+            ["template argument"] = "",
+          },
+          kind_icons = {
+            Compound = "",
+            Recovery = "",
+            TranslationUnit = "",
+            PackExpansion = "",
+            TemplateTypeParm = "",
+            TemplateTemplateParm = "",
+            TemplateParamObject = "",
+          },
+        },
+      },
+    },
+  },
+
+  -- ── C/C++ formatter ────────────────────────────────────────────
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        c   = { "clang_format" },
+        cpp = { "clang_format" },
+      },
     },
   },
 }
