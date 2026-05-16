@@ -35,10 +35,33 @@ return {
   {
     "saecki/crates.nvim",
     event = { "BufRead Cargo.toml" },
+    keys = {
+      -- Disable ALL crates.nvim keymaps under <leader>c
+      { "<leader>ct", false },
+      { "<leader>ci", false },
+      { "<leader>cv", false },
+      { "<leader>cr", false },
+      { "<leader>cu", false },
+      { "<leader>cf", false },
+      { "<leader>co", false },
+      { "<leader>cD", false },
+      { "<leader>cU", false },
+      { "<leader>cA", false },
+      { "<leader>cR", false },
+      { "<leader>cG", false },
+      { "<leader>cH", false },
+      { "<leader>cY", false },
+      { "<leader>cP", false },
+      { "<leader>cs", false },
+      { "<leader>cx", false },
+      { "<leader>cX", false },
+    },
     opts = {
       src = {
         cmp = { enabled = true },
       },
+      -- Disable all keymaps from crates.nvim
+      null_ls = { enabled = false },
     },
   },
 

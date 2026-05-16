@@ -152,31 +152,71 @@ map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 -- ── C++ / C dedicated keymaps (FileType autocmd) ────────
 -- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
 
--- Clear ALL LazyVim default <leader>c keymaps on LspAttach (buffer-local)
--- <leader>c is reserved exclusively for C++ keymaps (see FileType autocmd below)
+-- ── AGGRESSIVE: Nuke ALL <leader>c* keymaps, keep ONLY C++ ──
+-- Many plugins register under <leader>c: LazyVim code, copilot, crates, cheatsheet, cargo, lsp...
+-- We scan ALL keymaps and delete anything starting with <leader>c, then re-register C++ only.
+local function nuke_leader_c_keymaps()
+  local leader = vim.g.mapleader or " "
+  local prefix = leader .. "c"
+  -- Delete global keymaps (all modes)
+  for _, mode in ipairs({ "n", "v", "x", "o", "i" }) do
+    local maps = vim.api.nvim_get_keymap(mode)
+    for _, km in ipairs(maps) do
+      if km.lhs and km.lhs:sub(1, #prefix) == prefix then
+        pcall(vim.keymap.del, mode, km.lhs)
+      end
+    end
+  end
+  -- Delete buffer-local keymaps for ALL listed buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      for _, mode in ipairs({ "n", "v", "x" }) do
+        local ok, maps = pcall(vim.api.nvim_buf_get_keymap, buf, mode)
+        if ok then
+          for _, km in ipairs(maps) do
+            if km.lhs and km.lhs:sub(1, #prefix) == prefix then
+              pcall(vim.keymap.del, mode, km.lhs, { buffer = buf })
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+-- Nuke on VimEnter (after all plugins loaded), repeat with delays for lazy-loaded plugins
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    nuke_leader_c_keymaps()
+    vim.defer_fn(nuke_leader_c_keymaps, 1000)
+    vim.defer_fn(nuke_leader_c_keymaps, 3000)
+    vim.defer_fn(nuke_leader_c_keymaps, 5000)
+  end,
+})
+
+-- Nuke on LspAttach (LazyVim sets buffer-local <leader>c* on LspAttach)
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local buf = args.buf
-    local maps = {
-      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
-      "cR", "ce", "co", "ci", "ct", "cw",
-    }
-    for _, key in ipairs(maps) do
-      pcall(vim.keymap.del, "n", "<leader>" .. key, { buffer = buf })
+    local leader = vim.g.mapleader or " "
+    local prefix = leader .. "c"
+    for _, mode in ipairs({ "n", "v", "x" }) do
+      local ok, maps = pcall(vim.api.nvim_buf_get_keymap, buf, mode)
+      if ok then
+        for _, km in ipairs(maps) do
+          if km.lhs and km.lhs:sub(1, #prefix) == prefix then
+            pcall(vim.keymap.del, mode, km.lhs, { buffer = buf })
+          end
+        end
+      end
     end
   end,
 })
 
--- Also clear global <leader>c* keymaps after all plugins load (VimEnter)
-vim.api.nvim_create_autocmd("VimEnter", {
+-- Nuke on FileType for any file (catches plugins that set keymaps on filetype)
+vim.api.nvim_create_autocmd("FileType", {
   callback = function()
-    local maps = {
-      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
-      "cR", "ce", "co", "ci", "ct", "cw",
-    }
-    for _, key in ipairs(maps) do
-      pcall(vim.keymap.del, "n", "<leader>" .. key)
-    end
+    vim.defer_fn(nuke_leader_c_keymaps, 100)
   end,
 })
 
