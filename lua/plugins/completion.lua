@@ -121,9 +121,9 @@ return {
             return vim_item
           end,
         },
-        -- Experimental: ghost text (helpful on mobile)
+        -- Ghost text disabled — popup dropdown is used instead
         experimental = {
-          ghost_text = { hl_group = "CmpGhostText" },
+          ghost_text = false,
         },
       }
     end,

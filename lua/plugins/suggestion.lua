@@ -59,29 +59,39 @@ return {
     },
   },
 
-  -- ── C++ specific nvim-cmp override ───────────────────
-  -- Auto inline suggestion with ghost text for C/C++ files
+  -- ── C++ popup completion override ─────────────────────
+  -- Shows dropdown popup automatically when typing in C/C++ files
   {
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
       local cmp = require("cmp")
 
-      -- Override for C/C++: faster debounce + ensure ghost text is preserved
+      -- Filetype override for C/C++: popup dropdown, no inline ghost text
       cmp.setup.filetype({ "c", "cpp", "objc", "objcpp" }, {
         completion = {
-          -- noselect: don't pre-select, ghost text shows inline suggestion of first item
+          -- noselect: popup shows but nothing is pre-selected (safe to type freely)
           completeopt = "menu,menuone,noselect",
         },
         performance = {
-          debounce = 50,      -- faster response for C++ (clangd is local, fast)
+          debounce = 50,           -- fast: clangd is local process
           throttle = 30,
           fetching_timeout = 300,
-          max_view_entries = 15,
+          max_view_entries = 15,   -- limit items for Android RAM
         },
+        -- Explicit sources so clangd LSP is always the primary source
+        sources = cmp.config.sources({
+          { name = "nvim_lsp", priority = 1000 },   -- clangd completions
+          { name = "luasnip",  priority = 750 },    -- C++ snippets
+          { name = "path",     priority = 500 },    -- file paths
+        }, {
+          { name = "buffer", priority = 250, keyword_length = 3 },
+        }),
+        -- No ghost text — popup only
         experimental = {
-          ghost_text = { hl_group = "CmpGhostText" },  -- inline suggestion
+          ghost_text = false,
         },
       })
     end,
   },
 }
+
