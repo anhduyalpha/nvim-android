@@ -16,8 +16,7 @@ return {
         "clang-format",
         -- Linters
         "shellcheck",
-        -- LSP
-        "clangd",
+        -- LSP: clangd installed via pkg install clang (not Mason)
       },
       -- Mason settings optimized for Termux
       pip = { upgrade_pip = not android.is_termux() },
@@ -49,17 +48,18 @@ return {
     opts = {
       -- Auto-install these LSP servers
       ensure_installed = {
-        "lua_ls",
+        -- Only servers that Mason can install on Android/Termux
+        -- clangd → pkg install clang (system)
+        -- lua_ls → pkg install luarocks then luarocks install lua-lsp-server (system)
+        -- rust_analyzer → rustup component add rust-analyzer (system)
         "pyright",
         "vtsls",
-        "clangd",
         "html",
         "cssls",
         "jsonls",
         "yamlls",
         "marksman",
         "gopls",
-        "rust_analyzer",
       },
       -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
       automatic_installation = false,
