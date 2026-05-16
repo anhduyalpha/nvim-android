@@ -109,31 +109,42 @@ return {
       end
       capabilities = vim.tbl_deep_extend("force", capabilities, opts.capabilities or {})
 
-      -- Known valid LSP server names (filter out non-LSP tools like stylua, shfmt, *)
       local lspconfig = require("lspconfig")
-      local valid_servers = {}
-      for server, _ in pairs(lspconfig) do
-        if type(lspconfig[server]) == "table" and lspconfig[server].setup then
-          valid_servers[server] = true
-        end
+
+      -- Setup mason-managed servers using its built-in handler
+      local has_mason_lspconfig, mason_lspconfig = pcall(require, "mason-lspconfig")
+      if has_mason_lspconfig then
+        mason_lspconfig.setup_handlers({
+          function(server_name)
+            local server_opts = vim.tbl_deep_extend("force", {
+              capabilities = vim.deepcopy(capabilities),
+            }, opts.servers[server_name] or {})
+            
+            lspconfig[server_name].setup(server_opts)
+          end,
+        })
       end
 
-      -- Setup servers from opts (only valid ones)
+      -- Manually setup servers that are in opts.servers but NOT managed by mason
+      -- (e.g. clangd installed via termux pkg, not via mason)
       for server, server_opts in pairs(opts.servers) do
-        if valid_servers[server] then
-          local final_opts = vim.tbl_deep_extend("force", {
-            capabilities = vim.deepcopy(capabilities),
-          }, server_opts or {})
-          lspconfig[server].setup(final_opts)
-        end
-      end
-
-      -- Also setup any mason-installed servers not in opts.servers (with defaults)
-      local ok, mlsp = pcall(require, "mason-lspconfig")
-      if ok and mlsp.get_installed_servers then
-        for _, server in ipairs(mlsp.get_installed_servers()) do
-          if valid_servers[server] and not opts.servers[server] then
-            lspconfig[server].setup({ capabilities = vim.deepcopy(capabilities) })
+        if server_opts then
+          local is_mason_installed = false
+          if has_mason_lspconfig then
+            local installed = mason_lspconfig.get_installed_servers()
+            for _, s in ipairs(installed) do
+              if s == server then
+                is_mason_installed = true
+                break
+              end
+            end
+          end
+          
+          if not is_mason_installed and type(lspconfig[server]) == "table" and lspconfig[server].setup then
+            local final_opts = vim.tbl_deep_extend("force", {
+              capabilities = vim.deepcopy(capabilities),
+            }, server_opts)
+            lspconfig[server].setup(final_opts)
           end
         end
       end

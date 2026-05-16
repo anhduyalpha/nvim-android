@@ -88,6 +88,8 @@ progress $STEP $TOTAL_STEPS
 echo ""
 info "Step 5/9: Setting up storage access..."
 if [ ! -d "$HOME/storage" ]; then
+  warn "A popup will appear on your screen. Please tap 'Allow' to grant storage access."
+  sleep 2
   termux-setup-storage 2>/dev/null || warn "Storage setup requires user interaction"
 fi
 ok "Storage configured"

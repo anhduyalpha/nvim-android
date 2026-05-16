@@ -81,16 +81,25 @@ function M.auto_optimize()
   end
 end
 
+local monitor_timer = nil
+
 --- Setup periodic performance monitoring
 function M.setup_monitor()
   if not android.is_android() then
     return
   end
 
+  if monitor_timer then
+    monitor_timer:stop()
+    if not monitor_timer:is_closing() then
+      monitor_timer:close()
+    end
+  end
+
   -- Check performance every 5 minutes
-  local timer = (vim.uv or vim.loop).new_timer()
-  if timer then
-    timer:start(0, 300000, vim.schedule_wrap(function()
+  monitor_timer = (vim.uv or vim.loop).new_timer()
+  if monitor_timer then
+    monitor_timer:start(0, 300000, vim.schedule_wrap(function()
       M.auto_optimize()
     end))
   end
