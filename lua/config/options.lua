@@ -101,22 +101,8 @@ if android.is_termux() then
   }
 end
 
+
 -- ── Disable ALL LazyVim default <leader>c* keymaps ────
--- <leader>c is reserved exclusively for C++ keymaps
+-- <leader>c is reserved for C++ keymaps (defined in ftplugin/cpp.lua)
 vim.g.lazyvim_keys_lsp = false
 vim.g.lazyvim_keys_code = false
-
--- ── Feature Toggles (user can override in config/user.lua) ──
-vim.g.nvim_android_features = {
-  noice = true,              -- UI for messages/cmdline/search (light on Android)
-  fancy_dashboard = true,    -- Light, keep
-  git_signs = true,          -- Light, keep
-  debug = true,              -- Medium, keep by default
-  indent_guides = true,      -- Light, keep
-  bufferline = true,         -- Light, keep
-  illuminate = true,         -- Light, keep
-  flash = true,              -- Light, keep
-  zen_mode = true,           -- Light, keep
-  undotree = true,           -- Light, keep
-  harpoon = true,            -- Light, keep
-}
