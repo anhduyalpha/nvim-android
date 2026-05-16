@@ -152,31 +152,74 @@ map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 -- ── C++ / C dedicated keymaps (FileType autocmd) ────────
 -- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
 
--- Clear ALL LazyVim default <leader>c keymaps on LspAttach (buffer-local)
--- <leader>c is reserved exclusively for C++ keymaps (see FileType autocmd below)
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local buf = args.buf
-    local maps = {
-      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
-      "cR", "ce", "co", "ci", "ct", "cw",
-    }
-    for _, key in ipairs(maps) do
-      pcall(vim.keymap.del, "n", "<leader>" .. key, { buffer = buf })
+-- ── C++ / C dedicated keymaps (FileType autocmd) ────────
+-- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
+-- <leader>c is reserved EXCLUSIVELY for C++ keymaps.
+
+-- C++ keymap whitelist — these must NEVER be deleted
+local cpp_keys = {
+  ["<leader>ca"] = true,  -- code action
+  ["<leader>cc"] = true,  -- compile
+  ["<leader>cd"] = true,  -- type definition
+  ["<leader>cf"] = true,  -- format
+  ["<leader>ch"] = true,  -- switch header/source
+  ["<leader>ci"] = true,  -- symbol info
+  ["<leader>ck"] = true,  -- signature help
+  ["<leader>cn"] = true,  -- rename
+  ["<leader>cr"] = true,  -- run binary
+  ["<leader>ct"] = true,  -- build & run
+}
+
+-- Nuke ALL <leader>c* keymaps except C++ whitelist
+local function nuke_leader_c()
+  local leader = vim.g.mapleader or " "
+  local prefix = leader .. "c"
+  -- Global keymaps (all modes)
+  for _, mode in ipairs({ "n", "v", "x", "o" }) do
+    local ok, maps = pcall(vim.api.nvim_get_keymap, mode)
+    if ok then
+      for _, km in ipairs(maps) do
+        if km.lhs and km.lhs:sub(1, #prefix) == prefix and not cpp_keys[km.lhs] then
+          pcall(vim.keymap.del, mode, km.lhs)
+        end
+      end
     end
+  end
+  -- Buffer-local keymaps for ALL listed buffers
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      for _, mode in ipairs({ "n", "v", "x" }) do
+        local ok, maps = pcall(vim.api.nvim_buf_get_keymap, buf, mode)
+        if ok then
+          for _, km in ipairs(maps) do
+            if km.lhs and km.lhs:sub(1, #prefix) == prefix and not cpp_keys[km.lhs] then
+              pcall(vim.keymap.del, mode, km.lhs, { buffer = buf })
+            end
+          end
+        end
+      end
+    end
+  end
+  -- Re-register C++ keymaps if current buffer is c/cpp
+  local ft = vim.bo.filetype
+  if ft == "c" or ft == "cpp" then
+    vim.cmd("doautocmd FileType " .. ft)
+  end
+end
+
+-- Nuke on VimEnter (after ALL plugins loaded), repeat with delays for lazy-loaded plugins
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    nuke_leader_c()
+    vim.defer_fn(nuke_leader_c, 1000)
+    vim.defer_fn(nuke_leader_c, 3000)
   end,
 })
 
--- Also clear global <leader>c* keymaps after all plugins load (VimEnter)
-vim.api.nvim_create_autocmd("VimEnter", {
+-- Nuke on LspAttach (LazyVim sets buffer-local <leader>c* on LspAttach)
+vim.api.nvim_create_autocmd("LspAttach", {
   callback = function()
-    local maps = {
-      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
-      "cR", "ce", "co", "ci", "ct", "cw",
-    }
-    for _, key in ipairs(maps) do
-      pcall(vim.keymap.del, "n", "<leader>" .. key)
-    end
+    vim.defer_fn(nuke_leader_c, 100)
   end,
 })
 
