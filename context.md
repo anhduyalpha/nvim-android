@@ -377,3 +377,26 @@ _(None — project complete)_
 - **Completed**: All 34 files created, fully functional code
 - **Left off**: Ready for push to GitHub
 - **Commit**: `feat: initial release — full nvim-android IDE config`
+
+### Session #16 — 2026-05-16
+- **Duration**: ~15 min
+- **Worked on**: Comprehensive fix — keymap collisions, deprecated APIs, config issues, plugin updates
+- **Root cause**: Multiple sessions introduced overlapping keymaps, deprecated APIs accumulated, LazyVim 14.x/15.x breaking changes not addressed
+- **Completed**:
+  1. `keymaps.lua` — Removed duplicate `<leader>tt/tf/th` terminal keymaps (already in terminal.lua), removed `<leader>xq/xl` quickfix/location (now in Trouble via editor.lua), changed `<leader>fp` → `<leader>fP` to avoid Telescope registers collision, removed `<leader>wm` duplicate (already in editor.lua)
+  2. `keymaps.lua` — Updated `lsp_fallback = true` → `lsp_format = "fallback"` (conform.nvim deprecated lsp_fallback)
+  3. `options.lua` — Updated `nvim_treesitter#foldexpr()` → `v:lua.vim.treesitter.foldexpr()` (deprecated API)
+  4. `treesitter.lua` — Changed `auto_install = true` → `false` (problematic on Android), removed empty config function
+  5. `which-key.lua` — Fixed pattern: `opts` as table (not function), proper `config` function with `wk.setup(opts)` + `wk.add()`, added `<leader>U` (Undotree) group
+  6. `editor.lua` — Updated Trouble.nvim to v3 API: `TroubleToggle` → `Trouble`, `<leader>xw/xl/xq` → `<leader>xW/xL/xQ`
+  7. `extras.lua` — Updated harpoon to v2 API (`require("harpoon"):list():add()` etc.), changed undotree `<leader>u` → `<leader>U`, removed duplicate `t` keymap from Snacks
+  8. `autocmds.lua` — Removed duplicate `BufWritePre` format-on-save autocmd (LazyVim handles via conform.nvim)
+  9. `lsp.lua` — Removed `vim.notify` override hack, changed `ts_ls` → `vtsls` (LazyVim 12.x+ standard), added missing servers to ensure_installed
+  10. `lang/javascript.lua` — Updated `ts_ls` → `vtsls` server name
+  11. `lang/python.lua` — Changed neotest `<leader>tf` → `<leader>tF` (avoids collision with float terminal)
+  12. `lang/rust.lua` — Changed neotest `<leader>tf` → `<leader>tF`
+  13. `terminal.lua` — Replaced `%` placeholder with `{file}/{name}/{build}` placeholders, added `expand_runner()` helper, C/C++ runner now uses build/ folder
+  14. `completion.lua` — Added comment noting nvim-cmp is explicit choice for Android (not blink.cmp)
+  15. `scripts/setup-termux.sh` — Fixed progress bar, improved apt fallback
+  16. `README.md` — Updated keybinding table, architecture table, added compatibility note
+- **Commit**: `fix: resolve keymap collisions, deprecated APIs, and config issues for LazyVim 14.x/15.x`

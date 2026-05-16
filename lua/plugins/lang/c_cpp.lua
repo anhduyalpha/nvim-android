@@ -18,6 +18,8 @@ return {
             "--function-arg-placeholders",
             "--fallback-style=llvm",
             "--query-driver=/**",
+            "--suggest-missing-includes",
+            "--header-insertion-decorators",
           },
           settings = {
             clangd = {
@@ -49,6 +51,19 @@ return {
     opts = {
       cmake_build_directory = "build",
       cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=1" },
+    },
+  },
+
+  -- ── C++ fast inline completion (lower debounce for ghost text) ──
+  {
+    "hrsh7th/nvim-cmp",
+    ft = { "c", "cpp" },
+    opts = {
+      performance = {
+        debounce = 50,
+        throttle = 50,
+        fetching_timeout = 200,
+      },
     },
   },
 }

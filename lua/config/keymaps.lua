@@ -118,6 +118,12 @@ map("n", "N", "Nzzzv", { desc = "Prev search result (centered)" })
 -- Better paste (don't yank replaced text)
 map("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
 
+-- ── Delete to black hole register (don't pollute default register) ──
+map("n", "d", '"_d', { desc = "Delete (black hole)" })
+map("n", "dd", '"_dd', { desc = "Delete line (black hole)" })
+map("n", "x", '"_x', { desc = "Delete char (black hole)" })
+map("v", "d", '"_d', { desc = "Delete (black hole)" })
+
 -- ── Quick Actions ────────────────────────────────────────
 map("n", "<leader>;", "A;<Esc>", { desc = "Append semicolon" })
 map("n", "<leader>,", "A,<Esc>", { desc = "Append comma" })
@@ -146,11 +152,15 @@ map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 -- ── C++ / C dedicated keymaps (FileType autocmd) ────────
 -- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
 
--- Clear LazyVim default <leader>c keymaps on LspAttach (buffer-local)
+-- Clear ALL LazyVim default <leader>c keymaps on LspAttach (buffer-local)
+-- <leader>c is reserved exclusively for C++ keymaps (see FileType autocmd below)
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local buf = args.buf
-    local maps = { "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck" }
+    local maps = {
+      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
+      "cR", "ce", "co", "ci", "ct", "cw",
+    }
     for _, key in ipairs(maps) do
       pcall(vim.keymap.del, "n", "<leader>" .. key, { buffer = buf })
     end
