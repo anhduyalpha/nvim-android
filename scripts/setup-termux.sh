@@ -30,13 +30,13 @@ progress() {
 }
 
 STEP=0
-TOTAL_STEPS=8
+TOTAL_STEPS=9
 
 # ── Step 1: Verify Termux ─────────────────────────────────
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 1/8: Verifying Termux environment..."
+info "Step 1/9: Verifying Termux environment..."
 
 if [ ! -d "/data/data/com.termux" ]; then
   error "This script must be run inside Termux!"
@@ -47,7 +47,7 @@ ok "Running inside Termux"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 2/8: Updating packages..."
+info "Step 2/9: Updating packages..."
 apt update -y
 apt upgrade -y
 ok "Packages updated"
@@ -56,8 +56,8 @@ ok "Packages updated"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 3/8: Installing core dependencies..."
-CORE_PKGS="git nodejs python ripgrep fd lazygit unzip wget curl clang make"
+info "Step 3/9: Installing core dependencies..."
+CORE_PKGS="git nodejs python ripgrep fd lazygit unzip wget curl clang make stylua shfmt shellcheck"
 for pkg_name in $CORE_PKGS; do
   if ! command -v "$pkg_name" &>/dev/null && ! dpkg -l | grep -q "$pkg_name" 2>/dev/null; then
     info "  Installing $pkg_name..."
@@ -72,7 +72,7 @@ ok "Core dependencies installed"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 4/8: Installing optional language tools..."
+info "Step 4/9: Installing optional language tools..."
 OPTIONAL_PKGS="rust golang"
 for pkg_name in $OPTIONAL_PKGS; do
   if ! command -v "$pkg_name" &>/dev/null; then
@@ -86,7 +86,7 @@ ok "Optional tools processed"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 5/8: Setting up storage access..."
+info "Step 5/9: Setting up storage access..."
 if [ ! -d "$HOME/storage" ]; then
   termux-setup-storage 2>/dev/null || warn "Storage setup requires user interaction"
 fi
@@ -96,7 +96,7 @@ ok "Storage configured"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 6/8: Installing Neovim..."
+info "Step 6/9: Installing Neovim..."
 if ! command -v nvim &>/dev/null; then
   apt install -y neovim 2>/dev/null || error "Failed to install Neovim"
 fi
@@ -107,7 +107,7 @@ ok "Neovim installed: $NVIM_VERSION"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 7/8: Installing termux-api..."
+info "Step 7/9: Installing termux-api..."
 if ! command -v termux-clipboard-set &>/dev/null; then
   apt install -y termux-api 2>/dev/null || warn "termux-api install failed (clipboard may not work)"
 fi
@@ -117,7 +117,7 @@ ok "termux-api configured"
 STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
-info "Step 8/8: Setting up nvim-android config..."
+info "Step 8/9: Setting up nvim-android config..."
 
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 REPO_URL="https://github.com/anhduyalpha/nvim-android.git"
@@ -134,6 +134,31 @@ mkdir -p "$HOME/.config"
 info "Cloning nvim-android..."
 git clone "$REPO_URL" "$NVIM_CONFIG_DIR" || error "Failed to clone repo"
 ok "nvim-android config installed"
+
+# ── Step 9: Install Termux Nerd Font ──────────────────────
+STEP=$((STEP + 1))
+progress $STEP $TOTAL_STEPS
+echo ""
+info "Step 9/9: Installing JetBrainsMono Nerd Font for Termux..."
+
+FONT_DIR="$HOME/.termux"
+FONT_FILE="$FONT_DIR/font.ttf"
+FONT_URL="https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFont-Regular.ttf"
+
+mkdir -p "$FONT_DIR"
+if [ ! -f "$FONT_FILE" ]; then
+  info "Downloading Nerd Font..."
+  curl -fLo "$FONT_FILE" "$FONT_URL" 2>/dev/null || warn "Failed to download font. Icons might not display correctly."
+  
+  if command -v termux-reload-settings &>/dev/null; then
+    termux-reload-settings
+    ok "Nerd Font installed and applied!"
+  else
+    warn "Please restart Termux to apply the new font."
+  fi
+else
+  ok "Nerd Font already installed"
+fi
 
 # ── Done ──────────────────────────────────────────────────
 echo ""

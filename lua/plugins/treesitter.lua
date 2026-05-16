@@ -56,7 +56,11 @@ return {
         },
       },
     },
-    -- lazy.nvim applies opts automatically; no explicit config function needed
+    -- Setup function to explicitly set clang as the compiler for Termux
+    config = function(_, opts)
+      require("nvim-treesitter.install").compilers = { "clang" }
+      require("nvim-treesitter.configs").setup(opts)
+    end,
   },
 
   -- ── Treesitter textobjects (separate plugin) ───────────

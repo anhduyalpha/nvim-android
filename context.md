@@ -188,7 +188,7 @@ _(None — project complete)_
 | Snacks.image errors (missing kitty/imagemagick) | Medium | ✅ Fixed | Disabled snacks.image on Android |
 | dressing.nvim vs Snacks conflict | Medium | ✅ Fixed | Removed dressing.nvim, use Snacks for vim.ui |
 | Java LSP very heavy | Low | By design | Disabled by default, user must opt-in |
-| No Nerd Font in Termux | Low | By design | Using text fallback icons |
+| No Nerd Font in Termux | Low | ✅ Fixed | Auto-downloading JetBrainsMono via setup script |
 | Copilot needs auth | Low | By design | Disabled by default |
 | Keymap collisions (terminal, Trouble, undotree) | Medium | ✅ Fixed | Session #16: removed duplicates, updated to v3 APIs |
 | Deprecated foldexpr API | Medium | ✅ Fixed | `nvim_treesitter#foldexpr()` → `v:lua.vim.treesitter.foldexpr()` |
@@ -203,6 +203,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #19 — 2026-05-16
+- **Duration**: ~20 min
+- **Worked on**: Deep refactor for perfect Android Termux compatibility
+- **Completed**:
+  1. `lsp.lua` — Removed glibc Mason binaries (stylua, shfmt) & unsupported marksman
+  2. `treesitter.lua` — Explicitly forced `clang` as compiler for parsers on Termux
+  3. `setup-termux.sh` — Added Nerd Font auto-installer and native formatters
+- **Commit**: `refactor: perfect android termux compatibility (mason, treesitter, fonts)`
+
 ### Session #18 — 2026-05-16
 - **Duration**: ~10 min
 - **Worked on**: Remove heavy/incompatible plugins for Android

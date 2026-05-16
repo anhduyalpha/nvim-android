@@ -9,14 +9,13 @@ return {
     "mason-org/mason.nvim",
     cmd = "Mason",
     opts = {
-      ensure_installed = {
+      ensure_installed = android.is_termux() and {} or {
         -- Formatters
         "stylua",
         "shfmt",
         "clang-format",
         -- Linters
         "shellcheck",
-        -- LSP: clangd installed via pkg install clang (not Mason)
       },
       -- Mason settings optimized for Termux
       pip = { upgrade_pip = not android.is_termux() },
@@ -58,7 +57,6 @@ return {
         "cssls",
         "jsonls",
         "yamlls",
-        "marksman",
         "gopls",
       },
       -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
