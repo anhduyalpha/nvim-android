@@ -42,18 +42,35 @@ return {
 
       -- ── Code Runner ───────────────────────────────────
       local runners = {
-        python = "python3 %",
-        javascript = "node %",
-        typescript = "npx tsx %",
-        lua = "lua %",
+        python = "python3 {file}",
+        javascript = "node {file}",
+        typescript = "npx tsx {file}",
+        lua = "lua {file}",
         rust = "cargo run",
-        go = "go run %",
-        c = "gcc % -o %< && ./%<",
-        cpp = "g++ % -o %< && ./%<",
-        java = "javac % && java %<",
-        sh = "bash %",
-        bash = "bash %",
+        go = "go run {file}",
+        c = "gcc {file} -o {build}/{name} && {build}/{name}",
+        cpp = "g++ {file} -o {build}/{name} && {build}/{name}",
+        java = "javac {file} && java {name}",
+        sh = "bash {file}",
+        bash = "bash {file}",
       }
+
+      -- Helper: expand placeholders in runner commands
+      local function expand_runner(cmd)
+        local file = vim.fn.expand("%")
+        local dir = vim.fn.expand("%:h")
+        local name = vim.fn.expand("%:t:r")
+        local build = dir .. "/build"
+        -- Ensure build/ directory exists for C/C++
+        if file:match("%.[ch]$") or file:match("%.cpp$") or file:match("%.cc$") then
+          vim.fn.mkdir(build, "p")
+        end
+        cmd = cmd:gsub("{file}", file)
+        cmd = cmd:gsub("{name}", name)
+        cmd = cmd:gsub("{build}", build)
+        cmd = cmd:gsub("{dir}", dir)
+        return cmd
+      end
 
       -- Run current file
       vim.keymap.set("n", "<leader>rr", function()
@@ -67,10 +84,7 @@ return {
         -- Save file first
         vim.cmd("w")
 
-        -- Replace % with current file
-        local file = vim.fn.expand("%")
-        local file_noext = vim.fn.expand("%:r")
-        cmd = cmd:gsub("%%<", file_noext):gsub("%%", file)
+        cmd = expand_runner(cmd)
 
         local Terminal = require("toggleterm.terminal").Terminal
         local runner = Terminal:new({
@@ -99,9 +113,7 @@ return {
         local args = vim.fn.input("Arguments: ")
         vim.cmd("w")
 
-        local file = vim.fn.expand("%")
-        local file_noext = vim.fn.expand("%:r")
-        cmd = cmd:gsub("%%<", file_noext):gsub("%%", file) .. " " .. args
+        cmd = expand_runner(cmd) .. " " .. args
 
         local Terminal = require("toggleterm.terminal").Terminal
         local runner = Terminal:new({

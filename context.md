@@ -10,7 +10,7 @@
 - **Repo**: https://github.com/anhduyalpha/nvim-android.git
 - **Tech stack**: Lua, Neovim, LazyVim, Termux
 - **Owner**: anhduyalpha
-- **Last updated**: 2026-05-16
+- **Last updated**: 2026-05-16 (Session #16)
 
 ---
 
@@ -118,6 +118,7 @@ nvim-android/
 24. [2026-05-15] Created context.md
 25. [2026-05-16] Fix conform.nvim format_on_save warning, ToggleTerm compile_cpp error, clear LazyVim <leader>c defaults
 26. [2026-05-16] Output compiled binaries to `build/` folder next to source file
+27. [2026-05-16] Comprehensive fix pass: keymap collisions, deprecated APIs, Trouble v3, harpoon API, vtsls, code runner escaping
 
 ---
 
@@ -140,9 +141,16 @@ _(None — project complete)_
 | `<leader>tt` | Normal | Toggle terminal |
 | `<leader>tf` | Normal | Float terminal |
 | `<leader>th` | Normal | Horizontal terminal |
+| `<leader>tv` | Normal | Vertical terminal |
 | `<leader>ha` | Normal | Harpoon add file |
 | `<leader>hh` | Normal | Harpoon menu |
 | `<leader>uz` | Normal | Zen mode |
+| `<leader>U` | Normal | Undotree toggle |
+| `<leader>fP` | Normal | Copy file path |
+| `<leader>xQ` | Normal | Quickfix list (Trouble) |
+| `<leader>xL` | Normal | Location list (Trouble) |
+| `<leader>xW` | Normal | Workspace diagnostics (Trouble) |
+| `<leader>xx` | Normal | Document diagnostics (Trouble) |
 
 ### C/C++ only (FileType: c, cpp)
 | Key | Mode | Action |
@@ -179,10 +187,39 @@ _(None — project complete)_
 | Java LSP very heavy | Low | By design | Disabled by default, user must opt-in |
 | No Nerd Font in Termux | Low | By design | Using text fallback icons |
 | Copilot needs auth | Low | By design | Disabled by default |
+| Keymap collisions (terminal, Trouble, undotree) | Medium | ✅ Fixed | Session #16: removed duplicates, updated to v3 APIs |
+| Deprecated foldexpr API | Medium | ✅ Fixed | `nvim_treesitter#foldexpr()` → `v:lua.vim.treesitter.foldexpr()` |
+| treesitter auto_install on Android | Medium | ✅ Fixed | Changed to false (problematic on Android) |
+| which-key opts function calling setup directly | Medium | ✅ Fixed | Return opts table, use config for setup+add |
+| Double-format on save | Medium | ✅ Fixed | Removed AutoFormat autocmd (conform.nvim handles it) |
+| vim.notify hack in lsp.lua | Low | ✅ Fixed | Removed notify override, clean server filtering |
+| ts_ls → vtsls for JS/TS | Low | ✅ Fixed | Updated to LazyVim 12.x+ standard |
+| Code runner % escaping | Medium | ✅ Fixed | Use {file}/{name}/{build} placeholders |
+| setup-termux.sh progress bar broken | Low | ✅ Fixed | Simplified printf-based progress |
 
 ---
 
 ## Session History
+### Session #16 — 2026-05-16
+- **Duration**: ~15 min
+- **Worked on**: Comprehensive fix pass — keymap collisions, deprecated APIs, config issues
+- **Completed**:
+  1. `keymaps.lua` — Removed duplicate terminal keymaps (tt/tf/th), MaximizerToggle (wm), quickfix (xq/xl); changed fp→fP
+  2. `editor.lua` — Trouble.nvim v3 API: TroubleToggle→Trouble, xw→xW, xl→xL, xq→xQ
+  3. `extras.lua` — Harpoon new API (:list():add()/select()), removed duplicate t keymap, undotree u→U
+  4. `options.lua` — foldexpr: nvim_treesitter#foldexpr() → v:lua.vim.treesitter.foldexpr()
+  5. `treesitter.lua` — auto_install=false, removed empty config function
+  6. `which-key.lua` — Rewritten: opts returns table, config calls setup+add; added U group
+  7. `autocmds.lua` — Removed AutoFormat augroup (conform.nvim handles it)
+  8. `lsp.lua` — Removed vim.notify hack; added html/cssls/jsonls/yamlls/marksman/gopls/rust_analyzer
+  9. `completion.lua` — Added note about nvim-cmp being intentional for Android
+  10. `python.lua` / `rust.lua` — neotest tf→tF (avoids float terminal collision)
+  11. `javascript.lua` — ts_ls→vtsls (LazyVim 12.x+ standard)
+  12. `terminal.lua` — Fixed % escaping with {file}/{name}/{build} placeholders; C/C++ uses build/ folder
+  13. `setup-termux.sh` — Simplified progress bar; pkg→apt consistently
+  14. `README.md` — Updated keybinding table, architecture table, added compatibility note
+  15. `context.md` — Updated keybindings reference, known issues, session history
+
 ### Session #15 — 2026-05-16
 - **Duration**: ~2 min
 - **Worked on**: Output compiled binaries to `build/` folder next to source file

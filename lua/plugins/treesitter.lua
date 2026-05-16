@@ -29,7 +29,7 @@ return {
         "query",
       },
       -- Auto-install parsers when opening new filetypes
-      auto_install = true,
+      auto_install = false,
       highlight = {
         enable = true,
         -- Disable for large files (performance)
@@ -56,11 +56,7 @@ return {
         },
       },
     },
-    config = function(_, opts)
-      -- New nvim-treesitter uses opts table directly via lazy.nvim
-      -- No need for require("nvim-treesitter.configs").setup()
-      -- The opts are applied automatically by lazy.nvim
-    end,
+    -- lazy.nvim applies opts automatically; no explicit config function needed
   },
 
   -- ── Treesitter textobjects (separate plugin) ───────────

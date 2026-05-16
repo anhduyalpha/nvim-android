@@ -21,8 +21,12 @@ error() { echo -e "${RED}[ERROR]${NC} $1"; exit 1; }
 progress() {
   local current=$1 total=$2
   local pct=$((current * 100 / total))
-  local bar=$(printf '%*s' $((pct / 2)) '' | tr ' ' '█')
-  printf "\r  [%-50s] %d%%" "$bar" "$pct"
+  local filled=$((pct / 2))
+  local empty=$((50 - filled))
+  printf "\r  ["
+  printf "%0.s█" $(seq 1 $filled 2>/dev/null) || true
+  printf "%0.s " $(seq 1 $empty 2>/dev/null) || true
+  printf "] %d%%" "$pct"
 }
 
 STEP=0
@@ -44,8 +48,8 @@ STEP=$((STEP + 1))
 progress $STEP $TOTAL_STEPS
 echo ""
 info "Step 2/8: Updating packages..."
-pkg update -y 2>/dev/null || apt update -y
-pkg upgrade -y 2>/dev/null || apt upgrade -y
+apt update -y
+apt upgrade -y
 ok "Packages updated"
 
 # ── Step 3: Install core dependencies ─────────────────────
@@ -57,7 +61,7 @@ CORE_PKGS="git nodejs python ripgrep fd lazygit unzip wget curl clang make"
 for pkg_name in $CORE_PKGS; do
   if ! command -v "$pkg_name" &>/dev/null && ! dpkg -l | grep -q "$pkg_name" 2>/dev/null; then
     info "  Installing $pkg_name..."
-    pkg install -y "$pkg_name" 2>/dev/null || warn "  Failed to install $pkg_name (may be optional)"
+    apt install -y "$pkg_name" 2>/dev/null || warn "  Failed to install $pkg_name (may be optional)"
   else
     ok "  $pkg_name already installed"
   fi
@@ -73,7 +77,7 @@ OPTIONAL_PKGS="rust golang"
 for pkg_name in $OPTIONAL_PKGS; do
   if ! command -v "$pkg_name" &>/dev/null; then
     info "  Installing $pkg_name (optional)..."
-    pkg install -y "$pkg_name" 2>/dev/null || warn "  Failed to install $pkg_name"
+    apt install -y "$pkg_name" 2>/dev/null || warn "  Failed to install $pkg_name"
   fi
 done
 ok "Optional tools processed"
@@ -94,7 +98,7 @@ progress $STEP $TOTAL_STEPS
 echo ""
 info "Step 6/8: Installing Neovim..."
 if ! command -v nvim &>/dev/null; then
-  pkg install -y neovim 2>/dev/null || error "Failed to install Neovim"
+  apt install -y neovim 2>/dev/null || error "Failed to install Neovim"
 fi
 NVIM_VERSION=$(nvim --version | head -1)
 ok "Neovim installed: $NVIM_VERSION"
@@ -105,7 +109,7 @@ progress $STEP $TOTAL_STEPS
 echo ""
 info "Step 7/8: Installing termux-api..."
 if ! command -v termux-clipboard-set &>/dev/null; then
-  pkg install -y termux-api 2>/dev/null || warn "termux-api install failed (clipboard may not work)"
+  apt install -y termux-api 2>/dev/null || warn "termux-api install failed (clipboard may not work)"
 fi
 ok "termux-api configured"
 

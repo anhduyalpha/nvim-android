@@ -64,7 +64,7 @@ vim.opt.undoreload = 100              -- Lines to reload for undo
 
 -- ── Folding (using treesitter if available) ──────────────
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevel = 99                -- Open all folds by default
 vim.opt.foldlevelstart = 99
 vim.opt.foldenable = true

@@ -128,19 +128,8 @@ autocmd("FileType", {
   end,
 })
 
--- ── Auto-format on save (configurable per filetype) ──────
-augroup("AutoFormat", { clear = true })
-autocmd("BufWritePre", {
-  group = "AutoFormat",
-  desc = "Auto-format on save (if conform.nvim is available)",
-  pattern = { "*.lua", "*.py", "*.js", "*.ts", "*.jsx", "*.tsx", "*.rs", "*.go", "*.c", "*.cpp", "*.h" },
-  callback = function()
-    local ok, conform = pcall(require, "conform")
-    if ok then
-      conform.format({ async = false, lsp_fallback = true, timeout_ms = 1000 })
-    end
-  end,
-})
+-- ── Auto-format on save is handled by conform.nvim via LazyVim ──
+-- Do NOT add BufWritePre format autocmd here — it causes double-formatting
 
 -- ── Check for low memory periodically on Android ─────────
 if android.is_android() then

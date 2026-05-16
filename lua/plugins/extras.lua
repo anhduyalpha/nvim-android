@@ -31,10 +31,7 @@ return {
       -- Disable scope (not needed)
       scope = { enabled = false },
     },
-    -- Explorer keymaps: q to close selected buffer
-    keys = {
-      { "t", function() Snacks.picker.explorer() end, desc = "Toggle Snacks Explorer" },
-    },
+    -- Explorer keymaps: t toggle is in keymaps.lua
   },
 
   -- ── Copilot (AI completion — heavy, default OFF) ───────
@@ -60,12 +57,12 @@ return {
     enabled = features.harpoon ~= false,
     event = "VeryLazy",
     keys = {
-      { "<leader>ha", function() require("harpoon.mark").add_file() end, desc = "Harpoon add file" },
-      { "<leader>hh", function() require("harpoon.ui").toggle_quick_menu() end, desc = "Harpoon menu" },
-      { "<leader>1", function() require("harpoon.ui").nav_file(1) end, desc = "Harpoon file 1" },
-      { "<leader>2", function() require("harpoon.ui").nav_file(2) end, desc = "Harpoon file 2" },
-      { "<leader>3", function() require("harpoon.ui").nav_file(3) end, desc = "Harpoon file 3" },
-      { "<leader>4", function() require("harpoon.ui").nav_file(4) end, desc = "Harpoon file 4" },
+      { "<leader>ha", function() require("harpoon"):list():add() end, desc = "Harpoon add file" },
+      { "<leader>hh", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon menu" },
+      { "<leader>1", function() require("harpoon"):list():select(1) end, desc = "Harpoon file 1" },
+      { "<leader>2", function() require("harpoon"):list():select(2) end, desc = "Harpoon file 2" },
+      { "<leader>3", function() require("harpoon"):list():select(3) end, desc = "Harpoon file 3" },
+      { "<leader>4", function() require("harpoon"):list():select(4) end, desc = "Harpoon file 4" },
     },
     dependencies = { "nvim-lua/plenary.nvim" },
   },
@@ -96,7 +93,7 @@ return {
     "mbbill/undotree",
     enabled = features.undotree ~= false,
     keys = {
-      { "<leader>u", "<cmd>UndotreeToggle<cr>", desc = "Undotree" },
+      { "<leader>U", "<cmd>UndotreeToggle<cr>", desc = "Undotree" },
     },
   },
 

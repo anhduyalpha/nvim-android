@@ -103,15 +103,15 @@ return {
 
   -- ── Which-key → moved to lua/plugins/which-key.lua ────
 
-  -- ── Trouble (diagnostics list) ─────────────────────────
+  -- ── Trouble (diagnostics list) — v3 API ────────────────
   {
     "folke/trouble.nvim",
-    cmd = { "Trouble", "TroubleToggle" },
+    cmd = { "Trouble" },
     keys = {
-      { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "Document diagnostics" },
-      { "<leader>xw", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace diagnostics" },
-      { "<leader>xl", "<cmd>TroubleToggle loclist<cr>", desc = "Location list" },
-      { "<leader>xq", "<cmd>TroubleToggle quickfix<cr>", desc = "Quickfix list" },
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Document diagnostics" },
+      { "<leader>xW", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Workspace diagnostics" },
+      { "<leader>xL", "<cmd>Trouble loclist toggle<cr>", desc = "Location list" },
+      { "<leader>xQ", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list" },
     },
     opts = {
       use_diagnostic_signs = true,

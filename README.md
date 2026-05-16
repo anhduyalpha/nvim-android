@@ -34,6 +34,8 @@
 
 > ⚠️ **KHÔNG** cài Termux từ Play Store (phiên bản cũ, không maintained)
 
+> 📝 **Compatibility**: Tested with LazyVim 14.x/15.x and Neovim ≥ 0.10.0. Uses nvim-cmp (not blink.cmp) for Android stability. Uses vtsls for JS/TS (LazyVim 12.x+ standard).
+
 ---
 
 ## ⚡ Quick Start (3 bước)
@@ -117,8 +119,12 @@ Plugin sẽ tự động cài đặt lần đầu. Chờ hoàn thành là xong!
 |-----|--------|
 | `<leader>tt` | Toggle terminal |
 | `<leader>tf` | Float terminal |
+| `<leader>th` | Horizontal terminal |
+| `<leader>tv` | Vertical terminal |
 | `<leader>rr` | Run file hiện tại |
 | `<leader>rf` | Run với arguments |
+| `<leader>rl` | Run last command |
+| `<leader>tF` | Run file tests (neotest — Python/Rust/Go) |
 | `jk` (trong terminal) | Thoát terminal mode |
 
 ### Window & Buffer
@@ -138,6 +144,16 @@ Plugin sẽ tự động cài đặt lần đầu. Chờ hoàn thành là xong!
 | `<leader>fc` | Commands |
 | `<leader>fk` | Keymaps |
 | `<leader>ft` | Find TODOs |
+| `<leader>fP` | Copy file path |
+
+### UI & Misc
+| Key | Action |
+|-----|--------|
+| `<leader>us` | Toggle spell check |
+| `<leader>uw` | Toggle word wrap |
+| `<leader>un` | Toggle relative numbers |
+| `<leader>uz` | Zen mode |
+| `<leader>U` | Undotree toggle |
 
 ---
 
@@ -149,7 +165,7 @@ Mỗi ngôn ngữ được cấu hình riêng trong `lua/plugins/lang/`:
 |----------|-----|-----------|--------|-----|------|
 | Lua | lua_ls | stylua | — | — | — |
 | Python | pyright | black | ruff | debugpy | neotest |
-| JS/TS | ts_ls | prettier | eslint | js-debug | — |
+| JS/TS | vtsls | prettier | eslint | js-debug | — |
 | Rust | rust-analyzer | rustfmt | clippy | codelldb | neotest |
 | Go | gopls | goimports | — | delve | neotest |
 | C/C++ | clangd | clang-format | — | codelldb | — |

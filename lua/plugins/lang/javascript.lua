@@ -1,5 +1,5 @@
 -- plugins/lang/javascript.lua — JavaScript/TypeScript language support
--- LSP: ts_ls + eslint, Formatter: prettier, DAP: js-debug-adapter
+-- LSP: vtsls + eslint, Formatter: prettier, DAP: js-debug-adapter
 
 local android = require("util.android")
 
@@ -9,7 +9,7 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
-        ts_ls = {
+        vtsls = {
           settings = {
             typescript = {
               inlayHints = {

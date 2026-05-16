@@ -1,4 +1,6 @@
 -- plugins/completion.lua — Auto-completion with nvim-cmp
+-- NOTE: Uses nvim-cmp explicitly (not blink.cmp) for Android compatibility.
+-- LazyVim 14.x+ defaults to blink.cmp, but nvim-cmp is lighter and more stable on Termux.
 -- Debounced, limited items, optimized for Android performance
 
 local android = require("util.android")

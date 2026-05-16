@@ -51,8 +51,15 @@ return {
       ensure_installed = {
         "lua_ls",
         "pyright",
-        "ts_ls",
+        "vtsls",
         "clangd",
+        "html",
+        "cssls",
+        "jsonls",
+        "yamlls",
+        "marksman",
+        "gopls",
+        "rust_analyzer",
       },
       -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
       automatic_installation = false,
@@ -112,15 +119,6 @@ return {
         }
       end
 
-      -- Suppress lspconfig warnings for non-LSP tools during setup
-      local orig_notify = vim.notify
-      vim.notify = function(msg, level, opts)
-        if level == vim.log.levels.WARN and type(msg) == "string" and msg:find("config.*not found") then
-          return -- Skip "config X not found" warnings
-        end
-        return orig_notify(msg, level, opts)
-      end
-
       -- Known valid LSP server names (filter out non-LSP tools like stylua, shfmt, *)
       local lspconfig = require("lspconfig")
       local valid_servers = {}
@@ -139,9 +137,6 @@ return {
           lspconfig[server].setup(final_opts)
         end
       end
-
-      -- Restore original notify
-      vim.notify = orig_notify
     end,
   },
 

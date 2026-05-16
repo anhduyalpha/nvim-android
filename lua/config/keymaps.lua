@@ -102,7 +102,7 @@ map("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window w
 map("n", "<leader>-", "<cmd>split<cr>", { desc = "Horizontal split" })
 map("n", "<leader>|", "<cmd>vsplit<cr>", { desc = "Vertical split" })
 map("n", "<leader>we", "<C-w>=", { desc = "Equalize windows" })
-map("n", "<leader>wm", "<cmd>MaximizerToggle<cr>", { desc = "Maximize toggle" })
+-- <leader>wm (MaximizerToggle) is defined in editor.lua
 
 -- ── Movement (better mobile experience) ──────────────────
 -- Move lines up/down
@@ -207,8 +207,8 @@ vim.api.nvim_create_autocmd("FileType", {
     -- LSP actions
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", o, { desc = "Code action" }))
     vim.keymap.set("n", "<leader>cn", vim.lsp.buf.rename, vim.tbl_extend("force", o, { desc = "Rename symbol" }))
-    vim.keymap.set("n", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format file" }))
-    vim.keymap.set("v", "<leader>cf", function() require("conform").format({ async = true, lsp_fallback = true }) end, vim.tbl_extend("force", o, { desc = "Format selection" }))
+    vim.keymap.set("n", "<leader>cf", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, vim.tbl_extend("force", o, { desc = "Format file" }))
+    vim.keymap.set("v", "<leader>cf", function() require("conform").format({ async = true, lsp_format = "fallback" }) end, vim.tbl_extend("force", o, { desc = "Format selection" }))
     vim.keymap.set("n", "<leader>ck", vim.lsp.buf.signature_help, vim.tbl_extend("force", o, { desc = "Signature help" }))
     vim.keymap.set("n", "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", vim.tbl_extend("force", o, { desc = "Switch header/source" }))
     vim.keymap.set("n", "<leader>ci", "<cmd>ClangdSymbolInfo<cr>", vim.tbl_extend("force", o, { desc = "Symbol info" }))
@@ -216,10 +216,7 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- ── Terminal ─────────────────────────────────────────────
-map("n", "<leader>tt", "<cmd>ToggleTerm<cr>", { desc = "Toggle terminal" })
-map("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Float terminal" })
-map("n", "<leader>th", "<cmd>ToggleTerm direction=horizontal<cr>", { desc = "Horizontal terminal" })
+-- ── Terminal keymaps (tt/tf/th are in terminal.lua) ──────
 map("t", "jk", [[<C-\><C-n>]], { desc = "Escape terminal mode" })
 map("t", "<C-h>", [[<C-\><C-n><C-w>h]], { desc = "Terminal: go left" })
 map("t", "<C-j>", [[<C-\><C-n><C-w>j]], { desc = "Terminal: go down" })
@@ -234,9 +231,7 @@ map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 
--- ── Quickfix & Location List ─────────────────────────────
-map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix list" })
-map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location list" })
+-- ── Quickfix Navigation (xQ/xL are in editor.lua via Trouble) ──
 map("n", "]q", "<cmd>cnext<cr>", { desc = "Next quickfix" })
 map("n", "[q", "<cmd>cprev<cr>", { desc = "Previous quickfix" })
 
@@ -259,8 +254,8 @@ map("n", "<leader>uw", "<cmd>set wrap!<cr>", { desc = "Toggle word wrap" })
 -- Toggle relative numbers
 map("n", "<leader>un", "<cmd>set relativenumber!<cr>", { desc = "Toggle relative numbers" })
 
--- Copy file path
-map("n", "<leader>fp", function()
+-- Copy file path (<leader>fP avoids collision with Telescope registers)
+map("n", "<leader>fP", function()
   local path = vim.fn.expand("%:p")
   vim.fn.setreg("+", path)
   vim.notify("Copied: " .. path, vim.log.levels.INFO)
