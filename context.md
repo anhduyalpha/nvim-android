@@ -177,6 +177,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #15 — 2026-05-16
+- **Duration**: ~2 min
+- **Worked on**: Output compiled binaries to `build/` folder next to source file
+- **Completed**:
+  1. `keymaps.lua` — Changed output path from `%:r` (same dir) → `%:h/build/%:t:r` (build/ subfolder)
+  2. Added `vim.fn.mkdir(build_dir, "p")` to auto-create build/ directory
+  3. All 3 modes (compile, run, build_run) now use build/ folder
+- **Commit**: `feat: output compiled binaries to build/ folder next to source file`
+
 ### Session #14 — 2026-05-16
 - **Duration**: ~5 min
 - **Worked on**: Fix conform.nvim warning, ToggleTerm compile_cpp error, clear LazyVim <leader>c defaults

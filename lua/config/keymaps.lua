@@ -164,14 +164,20 @@ vim.api.nvim_create_autocmd("FileType", {
     local o = { buffer = buf, silent = true }
 
     -- Compile & Run helper (uses ToggleTerm Lua API)
+    -- Binaries go to build/ folder next to the source file
     local Terminal = require("toggleterm.terminal").Terminal
     local function compile_cpp(opt)
       local file = vim.fn.expand("%")
-      local out = vim.fn.expand("%:r")
+      local dir = vim.fn.expand("%:h")          -- directory of source file
+      local name = vim.fn.expand("%:t:r")        -- filename without extension
+      local build_dir = dir .. "/build"
+      local out = build_dir .. "/" .. name        -- build/filename
       local ft = vim.bo.filetype
       local compiler = ft == "c" and "gcc" or "g++"
       local std = ft == "c" and "-std=c17" or "-std=c++20"
       vim.cmd("w")
+      -- Ensure build/ directory exists
+      vim.fn.mkdir(build_dir, "p")
       if opt == "compile" then
         local compile_only = string.format("%s %s -O2 -Wall -o %s %s 2>&1", compiler, std, out, file)
         local result = vim.fn.system(compile_only)
