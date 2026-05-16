@@ -10,7 +10,7 @@
 - **Repo**: https://github.com/anhduyalpha/nvim-android.git
 - **Tech stack**: Lua, Neovim, LazyVim, Termux
 - **Owner**: anhduyalpha
-- **Last updated**: 2026-05-16 (Session #16)
+- **Last updated**: 2026-05-16 (Session #17)
 
 ---
 
@@ -119,6 +119,7 @@ nvim-android/
 25. [2026-05-16] Fix conform.nvim format_on_save warning, ToggleTerm compile_cpp error, clear LazyVim <leader>c defaults
 26. [2026-05-16] Output compiled binaries to `build/` folder next to source file
 27. [2026-05-16] Comprehensive fix pass: keymap collisions, deprecated APIs, Trouble v3, harpoon API, vtsls, code runner escaping
+28. [2026-05-16] Universal delete to black hole register (d/dd/x), clear ALL <leader>c defaults (16 keys), C++ inline completion (suggest-missing-includes, 50ms debounce)
 
 ---
 
@@ -131,6 +132,9 @@ _(None — project complete)_
 ### Global
 | Key | Mode | Action |
 |-----|------|--------|
+| `d` | Normal | Delete (black hole register — don't yank) |
+| `dd` | Normal | Delete line (black hole register) |
+| `x` | Normal | Delete char (black hole register) |
 | `t` | Normal | Toggle Snacks Explorer |
 | `<S-u>` | Normal | Focus Snacks Explorer (open or focus existing) |
 | `<leader>sb` | Normal | Grep in current buffer (Telescope) |
@@ -200,6 +204,16 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #17 — 2026-05-16
+- **Duration**: ~5 min
+- **Worked on**: Universal delete, clear all leader c defaults, C++ inline completion
+- **Completed**:
+  1. `keymaps.lua` — Added `d`/`dd`/`x` keymaps to black hole register (`"_d`, `"_dd`, `"_x`) — deletes don't pollute default register
+  2. `keymaps.lua` — Expanded LspAttach autocmd to clear 16 LazyVim `<leader>c*` keys (added cS, cR, ce, co, ci, ct, cw)
+  3. `c_cpp.lua` — Added `--suggest-missing-includes` and `--header-insertion-decorators` to clangd flags
+  4. `c_cpp.lua` — Added C++ specific nvim-cmp override with 50ms debounce for faster ghost text
+- **Commit**: `feat: universal delete to black hole, clear all leader c defaults, C++ inline completion`
+
 ### Session #16 — 2026-05-16
 - **Duration**: ~15 min
 - **Worked on**: Comprehensive fix pass — keymap collisions, deprecated APIs, config issues
