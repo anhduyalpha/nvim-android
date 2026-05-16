@@ -134,26 +134,6 @@ return {
       -- Define ghost text highlight (must exist for inline suggestions)
       vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", italic = true })
 
-      -- C/C++ popup completion override
-      cmp.setup.filetype({ "c", "cpp", "objc", "objcpp" }, {
-        completion = {
-          completeopt = "menu,menuone,noselect",
-        },
-        performance = {
-          debounce = 50,         -- clangd runs locally, super fast
-          throttle = 30,
-          fetching_timeout = 300,
-          max_view_entries = 15,
-        },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp", priority = 1000 },
-          { name = "luasnip",  priority = 750 },
-          { name = "path",     priority = 500 },
-        }, {
-          { name = "buffer", priority = 250, keyword_length = 3 },
-        }),
-        experimental = { ghost_text = true },
-      })
 
       -- Cmdline completion
       cmp.setup.cmdline("/", {
