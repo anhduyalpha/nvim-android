@@ -59,39 +59,45 @@ return {
     },
   },
 
-  -- ── C++ popup completion override ─────────────────────
-  -- Shows dropdown popup automatically when typing in C/C++ files
+  -- ── C++ popup completion (filetype override via autocmd) ─
+  -- Dùng autocmd BufEnter để tránh xung đột với config block của completion.lua
+  -- (lazy.nvim chỉ chạy 1 config block cuối cùng cho cùng plugin)
   {
     "hrsh7th/nvim-cmp",
-    opts = function(_, opts)
-      local cmp = require("cmp")
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "c", "cpp", "objc", "objcpp" },
+        desc = "C++ nvim-cmp popup config",
+        callback = function()
+          local ok, cmp = pcall(require, "cmp")
+          if not ok then return end
 
-      -- Filetype override for C/C++: popup dropdown, no inline ghost text
-      cmp.setup.filetype({ "c", "cpp", "objc", "objcpp" }, {
-        completion = {
-          -- noselect: popup shows but nothing is pre-selected (safe to type freely)
-          completeopt = "menu,menuone,noselect",
-        },
-        performance = {
-          debounce = 50,           -- fast: clangd is local process
-          throttle = 30,
-          fetching_timeout = 300,
-          max_view_entries = 15,   -- limit items for Android RAM
-        },
-        -- Explicit sources so clangd LSP is always the primary source
-        sources = cmp.config.sources({
-          { name = "nvim_lsp", priority = 1000 },   -- clangd completions
-          { name = "luasnip",  priority = 750 },    -- C++ snippets
-          { name = "path",     priority = 500 },    -- file paths
-        }, {
-          { name = "buffer", priority = 250, keyword_length = 3 },
-        }),
-        -- No ghost text — popup only
-        experimental = {
-          ghost_text = false,
-        },
+          cmp.setup.buffer({
+            completion = {
+              -- popup hiện ra ngay, không tự chọn item đầu tiên
+              completeopt = "menu,menuone,noselect",
+            },
+            performance = {
+              debounce = 50,         -- clangd chạy local nên rất nhanh
+              throttle = 30,
+              fetching_timeout = 300,
+              max_view_entries = 15,
+            },
+            -- Sources: clangd LSP là ưu tiên cao nhất
+            sources = cmp.config.sources({
+              { name = "nvim_lsp", priority = 1000 },
+              { name = "luasnip",  priority = 750 },
+              { name = "path",     priority = 500 },
+            }, {
+              { name = "buffer", priority = 250, keyword_length = 3 },
+            }),
+            experimental = { ghost_text = false },
+          })
+        end,
       })
     end,
   },
 }
+
+
 
