@@ -62,12 +62,11 @@ vim.opt.undodir = vim.fn.stdpath("data") .. "/undodir"
 vim.opt.undolevels = settings.undo_levels  -- Limited undo levels
 vim.opt.undoreload = 100              -- Lines to reload for undo
 
--- ── Folding (using treesitter if available) ──────────────
-vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+-- ── Folding (indent-based, no treesitter required) ─────
+vim.opt.foldmethod = "indent"
 vim.opt.foldlevel = 99                -- Open all folds by default
 vim.opt.foldlevelstart = 99
-vim.opt.foldenable = true
+vim.opt.foldenable = false            -- Disable folding on open
 
 -- ── Session & Shada ──────────────────────────────────────
 vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
