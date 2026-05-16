@@ -41,16 +41,6 @@ return {
     cmd = "Copilot",
     build = ":Copilot auth",
     event = "InsertEnter",
-    keys = {
-      -- Disable ALL copilot keymaps under <leader>c
-      { "<leader>cc", false },
-      { "<leader>cr", false },
-      { "<leader>ce", false },
-      { "<leader>ca", false },
-      { "<leader>cd", false },
-      { "<leader>cp", false },
-      { "<leader>cs", false },
-    },
     opts = {
       suggestion = { enabled = true, auto_trigger = true },
       panel = { enabled = false },

@@ -102,10 +102,9 @@ if android.is_termux() then
   }
 end
 
--- ── Disable ALL LazyVim default <leader>c* keymaps ────
+-- ── Disable LazyVim default LSP keymaps (<leader>c*) ────
 -- <leader>c is reserved exclusively for C++ keymaps
 vim.g.lazyvim_keys_lsp = false
-vim.g.lazyvim_keys_code = false
 
 -- ── Feature Toggles (user can override in config/user.lua) ──
 vim.g.nvim_android_features = {

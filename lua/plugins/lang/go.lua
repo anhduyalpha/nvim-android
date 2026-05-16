@@ -40,11 +40,10 @@ return {
     dependencies = { "ray-x/guihua.lua" },
     build = ':lua require("go.install").update_all_sync()',
     keys = {
-      -- Disable go.nvim keymaps under <leader>c (conflicts with C++ reserved)
-      { "<leader>ce", false },
-      { "<leader>ct", false },
-      { "<leader>cT", false },
-      { "<leader>cg", false },
+      { "<leader>ce", "<cmd>GoIfErr<cr>", desc = "Go if err" },
+      { "<leader>ct", "<cmd>GoAddTag<cr>", desc = "Go add tags" },
+      { "<leader>cT", "<cmd>GoRmTag<cr>", desc = "Go remove tags" },
+      { "<leader>cg", "<cmd>GoGenerate<cr>", desc = "Go generate" },
     },
     opts = {
       lsp_cfg = false,  -- We configure via lspconfig
@@ -53,8 +52,6 @@ return {
       dap_debug_gui = false,  -- Disable GUI for Android
       test_runner = "go",
       run_in_floaterm = true,
-      -- Disable all keymaps from go.nvim
-      keymaps = false,
     },
     config = function(_, opts)
       require("go").setup(opts)
