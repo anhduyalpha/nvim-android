@@ -1,10 +1,9 @@
--- plugins/suggestion.lua — C++ code completion & suggestion
--- Dedicated file to ensure clangd completion works properly on Android/Termux
-
-local android = require("util.android")
+-- plugins/suggestion.lua — Unified completion & C++ suggestion config
+-- Replaces old completion.lua + c_cpp.lua clangd config
+-- Ensures clangd completion works on Android/Termux
 
 return {
-  -- ── clangd LSP config ─────────────────────────────────
+  -- ── clangd LSP (C/C++ completion engine) ─────────────
   {
     "neovim/nvim-lspconfig",
     opts = {
@@ -34,31 +33,12 @@ return {
             )(fname) or vim.fn.getcwd()
           end,
           single_file_support = true,
-          capabilities = {
-            textDocument = {
-              completion = {
-                completionItem = {
-                  snippetSupport = true,
-                  commitCharactersSupport = true,
-                  deprecatedSupport = true,
-                  preselectSupport = true,
-                  insertReplaceSupport = true,
-                  resolveSupport = {
-                    properties = { "documentation", "detail", "additionalTextEdits" },
-                  },
-                },
-              },
-            },
-          },
           settings = {
             clangd = {
-              inlayHints = {
-                enabled = false,
-              },
+              inlayHints = { enabled = false },
             },
           },
           on_attach = function(client, bufnr)
-            -- Enable completion triggered manually
             if client.server_capabilities.completionProvider then
               vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
             end
@@ -68,28 +48,12 @@ return {
     },
   },
 
-  -- ── nvim-cmp optimized for C++ ────────────────────────
-  {
-    "hrsh7th/nvim-cmp",
-    ft = { "c", "cpp" },
-    opts = {
-      performance = {
-        debounce = 30,
-        throttle = 30,
-        fetching_timeout = 150,
-      },
-    },
-  },
-
-  -- ── Clangd extensions (extra completions) ─────────────
+  -- ── Clangd extensions (AST, memory, symbol info) ──────
   {
     "p00f/clangd_extensions.nvim",
     ft = { "c", "cpp", "objc", "objcpp" },
     opts = {
-      ast = {
-        role_icons = {},
-        kind_icons = {},
-      },
+      ast = { role_icons = {}, kind_icons = {} },
       memory_usage = { border = "rounded" },
       symbol_info = { border = "rounded" },
     },

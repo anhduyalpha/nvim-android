@@ -107,14 +107,6 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend("force", capabilities, opts.capabilities or {})
 
-      -- Reduce capabilities for performance on Android
-      if android.is_android() then
-        capabilities.textDocument.completion.completionItem.snippetSupport = false
-        capabilities.textDocument.completion.completionItem.resolveSupport = {
-          properties = { "documentation", "detail", "additionalTextEdits" },
-        }
-      end
-
       -- Known valid LSP server names (filter out non-LSP tools like stylua, shfmt, *)
       local lspconfig = require("lspconfig")
       local valid_servers = {}
