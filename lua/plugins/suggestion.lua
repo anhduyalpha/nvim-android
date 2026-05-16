@@ -17,7 +17,7 @@ return {
             "--completion-style=detailed",
             "--function-arg-placeholders",
             "--fallback-style=llvm",
-            "--query-driver=**",
+            "--query-driver=/**/*",
             "--suggest-missing-includes",
             "--header-insertion-decorators",
             "--pch-storage=memory",
@@ -57,5 +57,19 @@ return {
       memory_usage = { border = "rounded" },
       symbol_info = { border = "rounded" },
     },
+  },
+
+  -- ── C++ specific nvim-cmp override ───────────────────
+  {
+    "hrsh7th/nvim-cmp",
+    opts = function(_, opts)
+      local cmp = require("cmp")
+      -- Faster ghost text and debounce specifically for C/C++
+      cmp.setup.filetype({ "c", "cpp", "objc", "objcpp" }, {
+        performance = {
+          debounce = 50,
+        },
+      })
+    end,
   },
 }

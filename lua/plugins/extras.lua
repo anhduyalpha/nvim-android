@@ -34,22 +34,6 @@ return {
     -- Explorer keymaps: t toggle is in keymaps.lua
   },
 
-  -- ── Copilot (AI completion — heavy, default OFF) ───────
-  {
-    "zbirenbaum/copilot.lua",
-    enabled = features.copilot == true,
-    cmd = "Copilot",
-    build = ":Copilot auth",
-    event = "InsertEnter",
-    opts = {
-      suggestion = { enabled = true, auto_trigger = true },
-      panel = { enabled = false },
-      filetypes = {
-        markdown = true,
-        help = true,
-      },
-    },
-  },
 
   -- ── Harpoon (quick file navigation — light, default ON) ──
   {
@@ -107,32 +91,6 @@ return {
     },
   },
 
-  -- ── Obsidian (note taking — heavy, default OFF) ────────
-  {
-    "epwalsh/obsidian.nvim",
-    enabled = features.obsidian == true,
-    version = "*",
-    event = { "BufReadPre " .. vim.fn.expand("~") .. "/obsidian-vault/**/*.md" },
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {
-      dir = vim.fn.expand("~") .. "/obsidian-vault",
-    },
-  },
-
-  -- ── Leetbuddy (leetcode — default OFF) ─────────────────
-  {
-    "Dhanus3133/LeetBuddy.nvim",
-    enabled = features.leetbuddy == true,
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-    keys = {
-      { "<leader>lq", "<cmd>LBQuestions<cr>", desc = "Leetcode questions" },
-      { "<leader>ll", "<cmd>LBQuestion<cr>", desc = "Leetcode current" },
-      { "<leader>lr", "<cmd>LBReset<cr>", desc = "Leetcode reset" },
-      { "<leader>lt", "<cmd>LBTest<cr>", desc = "Leetcode test" },
-      { "<leader>ls", "<cmd>LBSubmit<cr>", desc = "Leetcode submit" },
-    },
-    config = true,
-  },
 
   -- ── Noice — Beautiful cmdline/messages/search UI ───────
   {

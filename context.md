@@ -78,7 +78,6 @@ nvim-android/
 │   │   │   ├── rust.lua ✅ Complete
 │   │   │   ├── go.lua ✅ Complete
 │   │   │   ├── c_cpp.lua ✅ Complete
-│   │   │   ├── java.lua ✅ Complete
 │   │   │   ├── markdown.lua ✅ Complete
 │   │   │   └── web.lua ✅ Complete
 │   │   └── extras.lua ✅ Complete
@@ -108,8 +107,8 @@ nvim-android/
 14. [2026-05-15] Implemented git (gitsigns, lazygit, diffview)
 15. [2026-05-15] Implemented terminal (toggleterm, code runner)
 16. [2026-05-15] Implemented navigation (telescope, neo-tree, flash)
-17. [2026-05-15] Implemented 9 language configs (lua, python, js/ts, rust, go, c/c++, java, markdown, web)
-18. [2026-05-15] Implemented extras (copilot, harpoon, zen-mode, undotree, fugitive, noice)
+17. [2026-05-15] Implemented 8 language configs (lua, python, js/ts, rust, go, c/c++, markdown, web)
+18. [2026-05-15] Implemented extras (harpoon, zen-mode, undotree, fugitive, noice)
 19. [2026-05-15] Created setup-termux.sh
 20. [2026-05-15] Created install-deps.sh
 21. [2026-05-15] Created fix-common-issues.sh
@@ -204,6 +203,15 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #18 — 2026-05-16
+- **Duration**: ~10 min
+- **Worked on**: Remove heavy/incompatible plugins for Android
+- **Completed**:
+  1. `java.lua` — Removed Java LSP (too heavy)
+  2. `extras.lua` — Removed Copilot, Obsidian, Leetbuddy (heavy/incompatible)
+  3. `options.lua` — Cleaned up toggle flags
+- **Commit**: `chore: remove heavy/incompatible plugins for Android`
+
 ### Session #17 — 2026-05-16
 - **Duration**: ~5 min
 - **Worked on**: Universal delete, clear all leader c defaults, C++ inline completion

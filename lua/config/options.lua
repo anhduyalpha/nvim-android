@@ -109,14 +109,11 @@ vim.g.lazyvim_keys_code = false
 
 -- ── Feature Toggles (user can override in config/user.lua) ──
 vim.g.nvim_android_features = {
-  copilot = false,           -- AI heavy
   noice = true,              -- UI for messages/cmdline/search (light on Android)
-  java_lsp = false,          -- Very heavy
   fancy_dashboard = true,    -- Light, keep
   git_signs = true,          -- Light, keep
   debug = true,              -- Medium, keep by default
   indent_guides = true,      -- Light, keep
-  minimap = false,           -- Heavy, off
   bufferline = true,         -- Light, keep
   illuminate = true,         -- Light, keep
   flash = true,              -- Light, keep
