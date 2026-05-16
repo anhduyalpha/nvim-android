@@ -5,14 +5,8 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Load core options
+-- Load core options (performance-tuned for Termux/Android)
 require("config.options")
-
--- Load keymaps
-require("config.keymaps")
-
--- Load autocmds
-require("config.autocmds")
 
 -- Bootstrap lazy.nvim and load all plugins
 require("config.lazy")
