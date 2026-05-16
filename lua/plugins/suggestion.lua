@@ -60,14 +60,26 @@ return {
   },
 
   -- ── C++ specific nvim-cmp override ───────────────────
+  -- Auto inline suggestion with ghost text for C/C++ files
   {
     "hrsh7th/nvim-cmp",
     opts = function(_, opts)
       local cmp = require("cmp")
-      -- Faster ghost text and debounce specifically for C/C++
+
+      -- Override for C/C++: faster debounce + ensure ghost text is preserved
       cmp.setup.filetype({ "c", "cpp", "objc", "objcpp" }, {
+        completion = {
+          -- noselect: don't pre-select, ghost text shows inline suggestion of first item
+          completeopt = "menu,menuone,noselect",
+        },
         performance = {
-          debounce = 50,
+          debounce = 50,      -- faster response for C++ (clangd is local, fast)
+          throttle = 30,
+          fetching_timeout = 300,
+          max_view_entries = 15,
+        },
+        experimental = {
+          ghost_text = { hl_group = "CmpGhostText" },  -- inline suggestion
         },
       })
     end,
