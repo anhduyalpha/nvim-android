@@ -63,17 +63,13 @@ return {
       },
       -- Disable automatic_installation to prevent picking up non-LSP tools (stylua, shfmt...)
       automatic_installation = false,
-      -- Handler: only setup servers that lspconfig knows about (suppress warnings for non-LSP)
-      handlers = {
-        [1] = function(server_name)
-          local ok, lspconfig = pcall(require, "lspconfig")
-          if ok and lspconfig[server_name] and lspconfig[server_name].setup then
-            lspconfig[server_name].setup({})
-          end
-          -- Silently skip non-LSP tools (no warning)
-        end,
-      },
+      -- NO default handler — all servers are setup by lspconfig's config function
+      -- which has the merged opts from all lang/*.lua specs (clangd, pyright, etc.)
+      handlers = {},
     },
+    config = function(_, opts)
+      require("mason-lspconfig").setup(opts)
+    end,
   },
 
   -- ── Native LSP ─────────────────────────────────────────
@@ -135,6 +131,16 @@ return {
             capabilities = vim.deepcopy(capabilities),
           }, server_opts or {})
           lspconfig[server].setup(final_opts)
+        end
+      end
+
+      -- Also setup any mason-installed servers not in opts.servers (with defaults)
+      local ok, mlsp = pcall(require, "mason-lspconfig")
+      if ok and mlsp.get_installed_servers then
+        for _, server in ipairs(mlsp.get_installed_servers()) do
+          if valid_servers[server] and not opts.servers[server] then
+            lspconfig[server].setup({ capabilities = vim.deepcopy(capabilities) })
+          end
         end
       end
     end,
