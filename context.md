@@ -10,7 +10,7 @@
 - **Repo**: https://github.com/anhduyalpha/nvim-android.git
 - **Tech stack**: Lua, Neovim, LazyVim, Termux
 - **Owner**: anhduyalpha
-- **Last updated**: 2026-05-15
+- **Last updated**: 2026-05-16
 
 ---
 
@@ -116,6 +116,8 @@ nvim-android/
 22. [2026-05-15] Created README.md (Vietnamese)
 23. [2026-05-15] Created INSTALL.md (Vietnamese)
 24. [2026-05-15] Created context.md
+25. [2026-05-16] Fix conform.nvim format_on_save warning, ToggleTerm compile_cpp error, clear LazyVim <leader>c defaults
+26. [2026-05-16] Output compiled binaries to `build/` folder next to source file
 
 ---
 
@@ -125,6 +127,7 @@ _(None — project complete)_
 ---
 
 ## Key Bindings Reference 🎹
+### Global
 | Key | Mode | Action |
 |-----|------|--------|
 | `t` | Normal | Toggle Snacks Explorer |
@@ -134,23 +137,26 @@ _(None — project complete)_
 | `<leader>db` | Normal | Toggle breakpoint |
 | `<leader>dc` | Normal | DAP continue |
 | `<leader>du` | Normal | Toggle DAP UI |
-| `<leader>ca` | Normal | Code action |
-| `<leader>cr` | Normal | Rename symbol |
-| `<leader>cf` | Normal/Visual | Format |
 | `<leader>tt` | Normal | Toggle terminal |
+| `<leader>tf` | Normal | Float terminal |
+| `<leader>th` | Normal | Horizontal terminal |
 | `<leader>ha` | Normal | Harpoon add file |
 | `<leader>hh` | Normal | Harpoon menu |
 | `<leader>uz` | Normal | Zen mode |
-| `<leader>ct` | Normal | C++ build & run file |
-| `<leader>cc` | Normal | C++ compile only |
-| `<leader>cr` | Normal | C++ run binary |
-| `<leader>ch` | Normal | Switch header/source |
-| `<leader>cn` | Normal | Rename symbol |
-| `<leader>ca` | Normal | Code action |
-| `<leader>cf` | Normal/Visual | Format |
-| `<leader>ck` | Normal | Signature help |
-| `<leader>ci` | Normal | Symbol info |
-| `<leader>cd` | Normal | Type definition |
+
+### C/C++ only (FileType: c, cpp)
+| Key | Mode | Action |
+|-----|------|--------|
+| `<leader>ct` | Normal | Build & run file (output → `build/`) |
+| `<leader>cc` | Normal | Compile only (output → `build/`) |
+| `<leader>cr` | Normal | Run binary from `build/` |
+| `<leader>ca` | Normal | Code action (LSP) |
+| `<leader>cn` | Normal | Rename symbol (LSP) |
+| `<leader>cf` | Normal/Visual | Format (conform.nvim) |
+| `<leader>ck` | Normal | Signature help (LSP) |
+| `<leader>ch` | Normal | Switch header/source (clangd) |
+| `<leader>ci` | Normal | Symbol info (clangd) |
+| `<leader>cd` | Normal | Type definition (LSP) |
 
 ---
 
