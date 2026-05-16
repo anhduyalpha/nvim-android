@@ -131,6 +131,9 @@ return {
       local cmp = require("cmp")
       cmp.setup(opts)
 
+      -- Define ghost text highlight (must exist for inline suggestions)
+      vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", italic = true })
+
       -- Cmdline completion
       cmp.setup.cmdline("/", {
         mapping = cmp.mapping.preset.cmdline(),

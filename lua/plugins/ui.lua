@@ -23,6 +23,8 @@ return {
         -- Custom highlights for better visibility on mobile
         hl.CursorLine = { bg = c.bg_highlight }
         hl.CursorLineNr = { fg = c.orange, bold = true }
+        -- Ghost text for C++ inline completion suggestions
+        hl.CmpGhostText = { fg = c.comment, italic = true }
       end,
     },
     config = function(_, opts)

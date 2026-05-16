@@ -167,6 +167,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end,
 })
 
+-- Also clear global <leader>c* keymaps after all plugins load (VimEnter)
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    local maps = {
+      "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck", "cS",
+      "cR", "ce", "co", "ci", "ct", "cw",
+    }
+    for _, key in ipairs(maps) do
+      pcall(vim.keymap.del, "n", "<leader>" .. key)
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
   callback = function(args)
