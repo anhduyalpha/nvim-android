@@ -150,6 +150,7 @@ return {
     "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
+    -- Do NOT set format_on_save here — LazyVim handles it automatically
     opts = {
       formatters_by_ft = {
         lua = { "stylua" },
@@ -169,10 +170,6 @@ return {
         cpp = { "clang_format" },
         sh = { "shfmt" },
         bash = { "shfmt" },
-      },
-      format_on_save = {
-        timeout_ms = 1000,
-        lsp_fallback = true,
       },
     },
   },

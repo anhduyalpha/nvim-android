@@ -177,6 +177,19 @@ _(None — project complete)_
 ---
 
 ## Session History
+### Session #14 — 2026-05-16
+- **Duration**: ~5 min
+- **Worked on**: Fix conform.nvim warning, ToggleTerm compile_cpp error, clear LazyVim <leader>c defaults
+- **Root cause**:
+  1. `conform.nvim` had `opts.format_on_save` set — LazyVim handles this automatically, setting it manually triggers warning
+  2. `vim.cmd("ToggleTerm cmd='...'")` failed because ToggleTerm command-line parser doesn't handle inline `cmd=` with complex shell commands; also `./%:r` with absolute paths produced `/.//path`
+  3. LazyVim buffer-local `<leader>c*` keymaps set on LspAttach were still visible in which-key for C++ files
+- **Completed**:
+  1. `lsp.lua` — Removed `format_on_save` from conform.nvim opts (LazyVim auto-handles)
+  2. `keymaps.lua` — Replaced `vim.cmd("ToggleTerm cmd=...")` with `Terminal:new({ cmd = ... }):toggle()` Lua API; fixed path by using absolute path directly (no `./` prefix)
+  3. `keymaps.lua` — Added `LspAttach` autocmd to delete all default LazyVim `<leader>c*` buffer-local keymaps before C++ keymaps take over
+- **Commit**: `fix: conform format_on_save warning, ToggleTerm compile_cpp API, clear LazyVim <leader>c defaults`
+
 ### Session #13 — 2026-05-15
 - **Duration**: ~5 min
 - **Worked on**: Fix overlapping UI + C++ keymaps not working (regression from Session #12)

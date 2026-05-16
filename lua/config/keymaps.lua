@@ -145,20 +145,32 @@ map("n", "K", vim.lsp.buf.hover, { desc = "Hover documentation" })
 
 -- ── C++ / C dedicated keymaps (FileType autocmd) ────────
 -- Only active when editing .c/.cpp files. No lazy.nvim plugin spec needed.
+
+-- Clear LazyVim default <leader>c keymaps on LspAttach (buffer-local)
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local buf = args.buf
+    local maps = { "ca", "cc", "cd", "cf", "cl", "cr", "cA", "cs", "cm", "ck" }
+    for _, key in ipairs(maps) do
+      pcall(vim.keymap.del, "n", "<leader>" .. key, { buffer = buf })
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "c", "cpp" },
   callback = function(args)
     local buf = args.buf
     local o = { buffer = buf, silent = true }
 
-    -- Compile & Run helper
+    -- Compile & Run helper (uses ToggleTerm Lua API)
+    local Terminal = require("toggleterm.terminal").Terminal
     local function compile_cpp(opt)
       local file = vim.fn.expand("%")
       local out = vim.fn.expand("%:r")
       local ft = vim.bo.filetype
       local compiler = ft == "c" and "gcc" or "g++"
       local std = ft == "c" and "-std=c17" or "-std=c++20"
-      local cmd = string.format("%s %s -O2 -Wall -o %s %s && ./%s", compiler, std, out, file, out)
       vim.cmd("w")
       if opt == "compile" then
         local compile_only = string.format("%s %s -O2 -Wall -o %s %s 2>&1", compiler, std, out, file)
@@ -173,9 +185,12 @@ vim.api.nvim_create_autocmd("FileType", {
           vim.notify("⚠️ Binary not found. Compile first (<leader>cc)", vim.log.levels.WARN)
           return
         end
-        vim.cmd("ToggleTerm cmd='./" .. out .. "'")
+        local t = Terminal:new({ cmd = out, close_on_exit = false, direction = "float" })
+        t:toggle()
       elseif opt == "build_run" then
-        vim.cmd("ToggleTerm cmd='" .. cmd .. "'")
+        local cmd = string.format("%s %s -O2 -Wall -o %s %s && %s", compiler, std, out, file, out)
+        local t = Terminal:new({ cmd = cmd, close_on_exit = false, direction = "float" })
+        t:toggle()
       end
     end
 
